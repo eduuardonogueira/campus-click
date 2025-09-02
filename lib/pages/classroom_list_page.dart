@@ -11,7 +11,7 @@ class ClassroomListPage extends StatefulWidget {
 class _ClassroomListPageState extends State<ClassroomListPage> {
   final List<Map<String, dynamic>> _classrooms = [];
 
-  // NOVO: controller e texto da pesquisa
+  // Controller e texto da pesquisa
   final TextEditingController _searchController = TextEditingController();
   String _searchText = "";
 
@@ -22,11 +22,12 @@ class _ClassroomListPageState extends State<ClassroomListPage> {
     );
 
     if (result != null && result is Map<String, dynamic>) {
+      // Adiciona dias fixos ao criar a sala
+      result["diasDisponiveis"] = ["Seg", "Ter", "Qua", "Qui", "Sex"];
       setState(() => _classrooms.add(result));
     }
   }
 
-  // NOVO: listener do searchController
   @override
   void initState() {
     super.initState();
@@ -45,7 +46,6 @@ class _ClassroomListPageState extends State<ClassroomListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // NOVO: filtra salas pelo texto da pesquisa
     final filteredClassrooms = _classrooms
         .where((sala) =>
             sala["nome"].toLowerCase().contains(_searchText.toLowerCase()))
@@ -57,31 +57,22 @@ class _ClassroomListPageState extends State<ClassroomListPage> {
         centerTitle: true,
       ),
       body: Column(
-        children: [
-          // NOVO: barra de pesquisa no topo esquerdo
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 24, 250, 0), // left, top, right, bottom
-              child: SizedBox(
-                width: 250,
-                height: 40,
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: "Pesquisar salas...",
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
+            children: [ 
+              Padding( padding: const EdgeInsets.all(8.0), 
+              child: Align( alignment: Alignment.centerRight, child:
+              Padding( padding: const EdgeInsets.fromLTRB(0, 24, 250, 0), // left, top, right, bottom 
+              child: SizedBox( width: 250, height: 40, child: 
+              TextField( controller: _searchController, decoration: 
+              InputDecoration( hintText: "Pesquisar salas...", prefixIcon:
+              const Icon(Icons.search), border: OutlineInputBorder( borderRadius:
+              BorderRadius.circular(12), 
+              ), 
             ),
-          ),
+          ), 
         ),
+      ),
+    ), 
+  ),
           // Lista de salas
           Expanded(
             child: filteredClassrooms.isEmpty
@@ -93,7 +84,7 @@ class _ClassroomListPageState extends State<ClassroomListPage> {
                       return Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 250, vertical: 10),
-                        child: ListTile(
+                        child: ExpansionTile(
                           leading: const Icon(Icons.meeting_room),
                           title: Text(sala["nome"]),
                           subtitle: Text(
@@ -107,6 +98,51 @@ class _ClassroomListPageState extends State<ClassroomListPage> {
                                 const Icon(Icons.ac_unit, color: Colors.lightBlue),
                             ],
                           ),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children:
+                                    sala["diasDisponiveis"].map<Widget>((dia) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.shade600,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            dia,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [
+                                            Text("18:00 - 20:00"),
+                                            Text("20:00 - 21:30"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
