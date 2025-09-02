@@ -97,7 +97,7 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                   labelText: "Prédio",
                   border: OutlineInputBorder(),
                 ),
-                value: _selectedBuilding,
+                initialValue: _selectedBuilding,
                 items: _buildings.map((b) {
                   return DropdownMenuItem(
                     value: b,
