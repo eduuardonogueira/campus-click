@@ -1,19 +1,24 @@
+import Link from "next/link";
+
 export default function Features() {
   const items = [
     {
       title: "Reserva de Salas",
       desc: "Encontre e reserve salas ou laboratórios",
       btn: "Procurar Salas Disponíveis",
+      link: "/reserva/1", 
     },
     {
       title: "Buscar e Filtrar",
       desc: "Encontre salas por capacidade, recursos e disponibilidade",
       btn: "Filtro Avançado",
+      link: "/filtros", 
     },
     {
       title: "Painel de Administração",
       desc: "Gerencie salas, usuários e configurações do sistema",
       btn: "Gerenciar Sistema",
+      link: "/admin",
     },
   ];
 
@@ -28,9 +33,11 @@ export default function Features() {
             <h3 className="text-lg font-semibold">{item.title}</h3>
             <p className="text-gray-600 mt-2">{item.desc}</p>
           </div>
-          <button className="mt-6 bg-black text-white py-2 rounded hover:opacity-90">
-            {item.btn}
-          </button>
+          <Link href={item.link}>
+            <button className="mt-6 bg-black text-white py-2 rounded hover:opacity-90">
+              {item.btn}
+            </button>
+          </Link>
         </div>
       ))}
     </section>

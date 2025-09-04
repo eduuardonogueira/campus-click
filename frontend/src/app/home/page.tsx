@@ -5,7 +5,7 @@ import Stats from "@/components/Stats";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col items-center px-6 py-8">
+    <main className="flex flex-col items-center">
       <Navbar />
       <Welcome />
       <Features />

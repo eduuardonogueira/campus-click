@@ -1,6 +1,6 @@
 export default function Navbar() {
   return (
-    <header className="w-full flex justify-between items-center p-4 border-b">
+    <header className="w-full flex justify-around items-center p-4 border-b margin-top none">
       <div className="flex items-center gap-2">
         <span className="text-xl font-bold">📅 Campus Click</span>
       </div>
