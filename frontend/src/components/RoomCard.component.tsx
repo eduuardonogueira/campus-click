@@ -1,72 +1,86 @@
-import Image from 'next/image';
-import styles from './SalaCard/SalaCard.module.css';
-import { 
-  FaMapMarkerAlt, 
-  FaUsers, 
-  FaTv, 
-  FaChalkboardTeacher, 
-  FaWifi, 
-  FaVideo 
-} from 'react-icons/fa';
-import { Amenity, IRoom } from '@/types/room';
-
+import Image from "next/image";
+import {
+  FaMapMarkerAlt,
+  FaUsers,
+  FaTv,
+  FaChalkboardTeacher,
+  FaWifi,
+  FaVideo,
+} from "react-icons/fa";
+import { Amenity, IRoom } from "@/types/room";
 
 interface IRoomCardProps {
   sala: IRoom;
 }
 
-// Mapeia o nome da amenidade para o componente de ícone correspondente
 const amenityIcons: Record<Amenity, React.ReactNode> = {
-  'Projetor': <FaTv />,
-  'Quadro': <FaChalkboardTeacher />,
-  'Wifi': <FaWifi />,
-  'Vídeo Conferência': <FaVideo />,
+  Projetor: <FaTv />,
+  Quadro: <FaChalkboardTeacher />,
+  Wifi: <FaWifi />,
+  "Vídeo Conferência": <FaVideo />,
 };
 
 export function RoomCard({ sala }: IRoomCardProps) {
   const statusClass = {
-    'Disponível': styles.disponivel,
-    'Ocupado': styles.ocupado,
-    'Manutenção': styles.manutencao,
+    Disponível: "bg-green-600 text-white",
+    Ocupado: "bg-yellow-400 text-gray-900",
+    Manutenção: "bg-red-600 text-white",
   }[sala.status];
 
   const buttonInfo = {
-    'Disponível': { text: 'Reservar Sala', disabled: false },
-    'Ocupado': { text: 'Reservada', disabled: true },
-    'Manutenção': { text: 'Em manutenção', disabled: true },
+    Disponível: { text: "Reservar Sala", disabled: false },
+    Ocupado: { text: "Reservada", disabled: true },
+    Manutenção: { text: "Em manutenção", disabled: true },
   }[sala.status];
 
   return (
-    <div className={styles.card}>
-      <div className={styles.imageContainer}>
-        <Image src={sala.imageUrl} alt={`Foto da ${sala.name}`} layout="fill" objectFit="cover" />
-        <span className={`${styles.statusBadge} ${statusClass}`}>{sala.status}</span>
+    <div className="bg-white border border-gray-200 rounded-lg shadow-md flex flex-col overflow-hidden">
+      <div className="relative w-full h-44">
+        <Image
+          src={sala.imageUrl}
+          alt={`Foto da ${sala.name}`}
+          fill
+          className="object-cover"
+        />
+        <span
+          className={`absolute top-4 right-4 px-3 py-1 rounded-xl text-xs font-bold ${statusClass}`}
+        >
+          {sala.status}
+        </span>
       </div>
-      <div className={styles.content}>
-        <h3 className={styles.title}>{sala.name}</h3>
-        
-        <div className={styles.infoRow}>
-          <FaMapMarkerAlt className={styles.infoIcon} />
+
+      <div className="p-5 flex flex-col flex-grow">
+        <h3 className="text-xl font-bold mb-2">{sala.name}</h3>
+
+        <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
+          <FaMapMarkerAlt className="w-4 h-4" />
           <p>{sala.location}</p>
         </div>
-        <div className={styles.infoRow}>
-          <FaUsers className={styles.infoIcon} />
+        <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
+          <FaUsers className="w-4 h-4" />
           <p>{sala.capacity} Pessoas</p>
         </div>
-        
-        <p className={styles.description}>{sala.description}</p>
-        
-        <div className={styles.amenities}>
-          {sala.amenities.map(amenity => (
-            <span key={amenity} className={styles.amenityTag}>
+
+        <p className="text-sm text-gray-700 flex-grow mb-4">{sala.description}</p>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {sala.amenities.map((amenity) => (
+            <span
+              key={amenity}
+              className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded text-xs text-gray-700"
+            >
               {amenityIcons[amenity]}
               {amenity}
             </span>
           ))}
         </div>
 
-        <button 
-          className={styles.actionButton} 
+        <button
+          className={`w-full py-3 rounded-md font-semibold text-white transition ${
+            buttonInfo.disabled
+              ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+              : "bg-black hover:opacity-80 cursor-pointer"
+          }`}
           disabled={buttonInfo.disabled}
         >
           {buttonInfo.text}

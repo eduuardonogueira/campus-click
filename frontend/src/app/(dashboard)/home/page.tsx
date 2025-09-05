@@ -12,7 +12,7 @@ export default async function HomePage() {
     <main className="flex flex-col items-center gap-10">
       <section className=" flex flex-col gap-2 items-center mt-10">
         <h2 className="text-3xl font-bold">Seja Bem vindo ao Campus Click</h2>
-        <h3 className="text-md ">
+        <h3 className="text-md text-gray-800">
           Gerenciamento e reserva de salas e laboratórios de forma simples,
           prática e acessível para toda a comunidade acadêmica.
         </h3>

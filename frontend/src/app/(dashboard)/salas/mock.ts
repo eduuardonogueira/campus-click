@@ -1,6 +1,6 @@
 import { IRoom } from "@/types/room";
 
-export const mockSalas: IRoom[] = [
+export const mockRooms: IRoom[] = [
   {
     id: 1,
     name: "SALA 101",
@@ -8,8 +8,7 @@ export const mockSalas: IRoom[] = [
     capacity: 30,
     status: "Disponível",
     amenities: ["Projetor", "Quadro", "Wifi", "Vídeo Conferência"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1590487988256-5582f9a7c3da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description:
       "Sala Excelente para aulas e apresentações de times, com diversos equipamentos e bastante confortável",
   },
@@ -20,8 +19,7 @@ export const mockSalas: IRoom[] = [
     capacity: 30,
     status: "Ocupado",
     amenities: ["Projetor", "Quadro", "Wifi"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1590487988256-5582f9a7c3da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description:
       "Sala Excelente para aulas e apresentações de times, com diversos equipamentos",
   },
@@ -32,8 +30,7 @@ export const mockSalas: IRoom[] = [
     capacity: 30,
     status: "Disponível",
     amenities: ["Projetor", "Quadro", "Wifi"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1590487988256-5582f9a7c3da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description:
       "Sala Excelente para aulas e apresentações de times, com diversos equipamentos e bastante confortável",
   },
@@ -44,8 +41,7 @@ export const mockSalas: IRoom[] = [
     capacity: 30,
     status: "Manutenção",
     amenities: ["Vídeo Conferência"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1556761175-b413da4b248a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description: "Sala Excelente para aulas e apresentações de times",
   },
   {
@@ -55,8 +51,7 @@ export const mockSalas: IRoom[] = [
     capacity: 30,
     status: "Manutenção",
     amenities: ["Projetor", "Wifi", "Vídeo Conferência"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1556761175-b413da4b248a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description:
       "Sala Excelente para aulas e apresentações de times, com diversos equipamentos",
   },
@@ -67,8 +62,7 @@ export const mockSalas: IRoom[] = [
     capacity: 30,
     status: "Manutenção",
     amenities: ["Quadro"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1556761175-b413da4b248a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description:
       "Sala Excelente para aulas e apresentações de times, com diversos equipamentos e bastante confortável",
   },

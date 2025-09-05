@@ -30,7 +30,9 @@ export function Navbar({
           <FaUserCircle className="text-5xl" />
           <div className="flex flex-col justify-center align-top">
             <span className="">{userName}</span>
-            <span className="text-sm bg-black py-1 px-4 text-white w-min rounded-2xl">{userRole}</span>
+            <span className="text-sm bg-black py-1 px-4 text-white w-min rounded-2xl">
+              {userRole}
+            </span>
           </div>
         </div>
 
