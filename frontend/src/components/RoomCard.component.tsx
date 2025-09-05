@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from './SalaCard.module.css';
+import styles from './SalaCard/SalaCard.module.css';
 import { 
   FaMapMarkerAlt, 
   FaUsers, 
@@ -8,23 +8,11 @@ import {
   FaWifi, 
   FaVideo 
 } from 'react-icons/fa';
+import { Amenity, IRoom } from '@/types/room';
 
-type Amenity = 'Projetor' | 'Quadro' | 'Wifi' | 'Vídeo Conferência';
-export type SalaStatus = 'Disponível' | 'Ocupado' | 'Manutenção';
 
-export interface Sala {
-  id: number;
-  name: string;
-  location: string;
-  capacity: number;
-  description: string;
-  amenities: Amenity[];
-  status: SalaStatus;
-  imageUrl: string;
-}
-
-interface SalaCardProps {
-  sala: Sala;
+interface IRoomCardProps {
+  sala: IRoom;
 }
 
 // Mapeia o nome da amenidade para o componente de ícone correspondente
@@ -35,7 +23,7 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
   'Vídeo Conferência': <FaVideo />,
 };
 
-export default function SalaCard({ sala }: SalaCardProps) {
+export function RoomCard({ sala }: IRoomCardProps) {
   const statusClass = {
     'Disponível': styles.disponivel,
     'Ocupado': styles.ocupado,
