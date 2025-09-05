@@ -3,3 +3,4 @@ export const SIGNUP_ROUTE = "/auth/cadastro";
 export const HOME_ROUTE = "/home";
 export const ROOMS_ROUTE = "/salas";
 export const ADMIN_ROUTE = "/admin";
+

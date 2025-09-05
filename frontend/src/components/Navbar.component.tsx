@@ -1,18 +1,16 @@
+"use server";
+
 import { HOME_ROUTE } from "@/constants/routes";
 import Link from "next/link";
-import {
-  FaCalendarAlt,
-  FaUserCircle,
-  FaCog,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaCalendarAlt, FaUserCircle, FaCog } from "react-icons/fa";
+import { LogoutButton } from "./index";
 
 interface INavbarProps {
   userName?: string;
   userRole?: string;
 }
 
-export function Navbar({
+export async function Navbar({
   userName = "aluno.teste@discente.ufra.edu.br",
   userRole = "Aluno",
 }: INavbarProps) {
@@ -40,9 +38,7 @@ export function Navbar({
           <button className="hover:cursor-pointer" aria-label="Configurações">
             <FaCog />
           </button>
-          <button className="hover:cursor-pointer" aria-label="Sair">
-            <FaSignOutAlt />
-          </button>
+          <LogoutButton />
         </nav>
       </div>
     </header>
