@@ -7,7 +7,7 @@ export const mockRooms: IRoom[] = [
     location: "Pavilhão, 1 Andar",
     capacity: 30,
     status: "Disponível",
-    amenities: ["Projetor", "Quadro", "Wifi", "Vídeo Conferência"],
+    amenities: ["Projetor", "Vídeo Conferência", "Wifi"],
     imageUrl: "https://i.imgur.com/5sXV0QV.png",
     description:
       "Sala Excelente para aulas e apresentações de times, com diversos equipamentos e bastante confortável",
@@ -42,7 +42,7 @@ export const mockRooms: IRoom[] = [
     status: "Manutenção",
     amenities: ["Vídeo Conferência"],
     imageUrl: "https://i.imgur.com/5sXV0QV.png",
-    description: "Sala Excelente para aulas e apresentações de times",
+    description: "Sala Excelente para aulas e apresentações de times, espaço amplo e confortável",
   },
   {
     id: 5,
