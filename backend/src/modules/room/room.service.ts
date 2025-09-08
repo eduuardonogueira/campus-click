@@ -29,11 +29,11 @@ export class RoomService {
   }
 
   async update(id: number, updateRoomDto: UpdateRoomDto) {
-    // Verifica se a sala existe
-    const room = await this.roomRepository.findOne({ where: { id } });
-    if (!room) {
-      throw new Error(`Room with ID ${id} not found`);
-    }
+    const room = await this.findOne( id ); // mudei aqui (qualquer coisa volta o normal)
+    // const room = await this.roomRepository.findOne({ where: { id } });
+    // if (!room) {
+    //   throw new Error(`Room with ID ${id} not found`);
+    // }
 
     if (updateRoomDto.name !== undefined) room.name = updateRoomDto.name;
     if (updateRoomDto.locationBloco !== undefined) room.locationBloco = updateRoomDto.locationBloco;
