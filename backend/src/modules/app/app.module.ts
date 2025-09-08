@@ -8,18 +8,26 @@ import { RoomModule } from '../room/room.module';
 import { Room } from '../room/entities/room.entity';
 import { Booking } from '../booking/entities/booking.entity';
 import { User } from '../user/entities/user.entity';
+import configuration from '../../config/configuration';
+import { Amenity } from 'src/modules/amenities/entities/amenity.entity';
+
+
+const config = configuration();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: 'avnadmin',
-      password: process.env.PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [Room, Booking, User],
+      type: 'postgres',
+      host: config.dbHost,
+      port: config.dbPort,
+  username: config.dbUser,
+  password: config.dbPass,
+      database: config.dbName,
+      entities: [Room, Booking, User, Amenity],
       synchronize: true,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     RoomModule
   ],

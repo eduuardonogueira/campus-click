@@ -9,27 +9,48 @@ import { Repository } from 'typeorm';
 export class RoomService {
   constructor(@InjectRepository(Room) private roomRepository: Repository<Room>) {}
   
-  create(createRoomDto: CreateRoomDto) {
+  async create(createRoomDto: CreateRoomDto) {
     let room = this.roomRepository.create(createRoomDto);
     room.createdAt = new Date();
     room.updatedAt = new Date();
-    return this.roomRepository.save(room);
+    return await this.roomRepository.save(room);
   }
 
   findAll() {
     return this.roomRepository.find();
   }
 
-  findOne(id: number) {
-    return this.roomRepository.findOne({ where: { id } });
+  async findOne(id: number) {
+    const room = await this.roomRepository.findOne({ where: { id } });
+    if (!room) {
+      throw new Error(`Room with ID ${id} not found`);
+    }
+    return room;
   }
 
-  update(id: number, updateRoomDto: UpdateRoomDto) {
-    return this.roomRepository.update(id, updateRoomDto);
+  async update(id: number, updateRoomDto: UpdateRoomDto) {
+    // Verifica se a sala existe
+    const room = await this.roomRepository.findOne({ where: { id } });
+    if (!room) {
+      throw new Error(`Room with ID ${id} not found`);
+    }
+
+    if (updateRoomDto.name !== undefined) room.name = updateRoomDto.name;
+    if (updateRoomDto.locationBloco !== undefined) room.locationBloco = updateRoomDto.locationBloco;
+    if (updateRoomDto.locationAndar !== undefined) room.locationAndar = updateRoomDto.locationAndar;
+    if (updateRoomDto.amenities !== undefined) room.amenities = updateRoomDto.amenities;
+
+    room.updatedAt = new Date();
+
+    return this.roomRepository.save(room);
   }
 
-  remove(id: number) {
-    return this.roomRepository.delete(id);
+  async remove(id: number) {
+    const room = await this.roomRepository.findOne({ where: { id } });
+    if (!room) {
+      throw new Error(`Room with ID ${id} not found`);
+    }
+    return await this.roomRepository.delete(id);
   }
 
   

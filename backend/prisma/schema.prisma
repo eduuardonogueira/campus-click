@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -48,10 +48,10 @@ model Booking {
   userId    Int
   room      Room     @relation(fields: [roomId], references: [id])
   roomId    Int
+  queue     String[]
   startTime DateTime
   endTime   DateTime
-  details   String?
-  queue     String // Array de IDs de usuários na fila
+  details   String? // Array de IDs de usuários na fila
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
