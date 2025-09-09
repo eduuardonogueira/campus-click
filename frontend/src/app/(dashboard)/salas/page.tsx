@@ -1,12 +1,14 @@
 "use client";
 
 import { RoomCard } from "@/components/index";
+import { RoomCards } from "@/components/RoomCardAdmin";
 import { FaSearch, FaFilter } from "react-icons/fa";
 import { mockRooms } from "./mock";
 import { ChangeEvent, useState } from "react";
 
 export default function SalasPage() {
   const [search, setSearch] = useState("");
+  const userRole = "admin"; //Admin ou "User"
 
   const filteredSalas = mockRooms.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
@@ -18,10 +20,15 @@ export default function SalasPage() {
 
   return (
     <main className="max-w-[1200px] mx-auto p-8">
+      
       <header className="mb-8">
         <div>
-          <h1 className="text-4xl font-bold">Salas</h1>
-          <p className="text-gray-500 text-lg">Faça a reserva da sua sala</p>
+          <h1 className="text-4xl font-bold">
+            {userRole === "admin" ? "Painel do Administrador" : "Salas"}
+          </h1>
+          <p className="text-gray-500 text-lg">
+            {userRole === "admin" ? "Crie, edite e gerencie salas" : "Faça a reserva da sua sala"}
+          </p>
         </div>
       </header>
 
@@ -60,10 +67,14 @@ export default function SalasPage() {
       </div>
 
       <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
-        {filteredSalas.map((sala) => (
-          <RoomCard key={sala.id} sala={sala} />
-        ))}
-      </div>
+  {filteredSalas.map((sala) =>
+    userRole === "admin" ? (
+      <RoomCards key={sala.id} sala={sala} userRole="Admin" />
+    ) : (
+      <RoomCard key={sala.id} sala={sala} />
+    )
+  )}
+</div>
     </main>
   );
 }
