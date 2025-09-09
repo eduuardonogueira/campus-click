@@ -1,5 +1,10 @@
-import { ROOMS_ROUTE, ADMIN_ROUTE } from "@/constants/routes";
-import { FaCalendar, FaSearch } from "react-icons/fa";
+import {
+  ROOMS_ROUTE,
+  ADMIN_ROUTE,
+  RESERVATIONS_ROUTE,
+} from "@/constants/routes";
+
+import { FaCalendar, FaSearch, FaCalendarCheck } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 
 export function useHomeData() {
@@ -9,14 +14,15 @@ export function useHomeData() {
       text: "Encontre e reserve salas ou laboratórios",
       buttonText: "Procurar salas disponíveis",
       link: ROOMS_ROUTE,
-      icon: FaCalendar,
+      icon: FaSearch,
     },
     {
-      title: "Buscar e Filtrar",
-      text: "Encontre salas por capacidade, recursos e disponibilidade",
-      buttonText: "Filtro avançado",
-      link: ROOMS_ROUTE,
-      icon: FaSearch,
+      
+      title: "Minhas Reservas",
+      text: "Encontre suas reservas por dia e horário",
+      buttonText: "Ver Reservas",
+      link: RESERVATIONS_ROUTE,
+      icon: FaCalendarCheck,
     },
     {
       title: "Painel de Administração",
@@ -29,4 +35,3 @@ export function useHomeData() {
 
   return { actionCardData };
 }
-

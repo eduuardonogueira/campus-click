@@ -1,7 +1,7 @@
 "use client";
 
 import { login } from "@/app/actions";
-import { HOME_ROUTE } from "@/constants/routes";
+import { HOME_ROUTE, SIGNUP_ROUTE } from "@/constants/routes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -71,7 +71,7 @@ export default function LoginPage() {
         <p className="mt-6 text-gray-500">
           Não tem uma conta?{" "}
           <Link
-            href="/cadastro"
+            href={SIGNUP_ROUTE}
             className="text-blue-600 font-bold hover:underline"
           >
             Cadastre-se
