@@ -12,7 +12,7 @@ interface INavbarProps {
 
 export async function Navbar({
   userName = "aluno.teste@discente.ufra.edu.br",
-  userRole = "Aluno",
+  userRole = "aluno"
 }: INavbarProps) {
   return (
     <header className="flex justify-between px-9 py-3 items-center border-b-gray-900 border-1">

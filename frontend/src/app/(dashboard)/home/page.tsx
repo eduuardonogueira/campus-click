@@ -4,9 +4,10 @@ import { useHomeData } from "@/hooks/useHomeData";
 import ActionCard from "./ActionCard";
 import StatsCard from "./StatsCard";
 import { statsMock } from "./mock";
+const userRole = "user" // altere para ver o painel do admin
 
 export default async function HomePage() {
-  const { actionCardData } = useHomeData();
+  const { actionCardData } = useHomeData(userRole);
 
   return (
     <main className="flex flex-col items-center gap-10">

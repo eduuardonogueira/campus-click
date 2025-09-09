@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import {
   FaMapMarkerAlt,
   FaUsers,
@@ -10,9 +13,11 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { Amenity, IRoom } from "@/types/room";
+import { EditRoomModal, DeleteRoomModal } from "@/components/Modal.component";
 
 interface IRoomCardProps {
   sala: IRoom;
+  userRole: string;
 }
 
 const amenityIcons: Record<Amenity, React.ReactNode> = {
@@ -22,8 +27,11 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
   "Vídeo Conferência": <FaVideo />,
 };
 
-export function RoomCards({ sala }: IRoomCardProps) {
-    const statusClass = {
+export function RoomCards({ sala, userRole }: IRoomCardProps) {
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [isDeleteOpen, setDeleteOpen] = useState(false);
+
+  const statusClass = {
     Disponível: "bg-green-300 text-white",
     Ocupado: "bg-yellow-300 text-gray-900",
     Manutenção: "bg-red-300 text-white",
@@ -50,14 +58,13 @@ export function RoomCards({ sala }: IRoomCardProps) {
         <h3 className="text-lg font-semibold mb-2">{sala.name}</h3>
 
         <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
-            <FaMapMarkerAlt className="inline w-4 h-4 mr-1" /> 
-            <p>{sala.location}</p> 
-      
+          <FaMapMarkerAlt className="inline w-4 h-4 mr-1" /> 
+          <p>{sala.location}</p> 
         </div>
 
         <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
-            <FaUsers className="inline w-4 h-4 mr-1" /> 
-            <p>{sala.capacity} Pessoas</p> 
+          <FaUsers className="inline w-4 h-4 mr-1" /> 
+          <p>{sala.capacity} Pessoas</p> 
         </div>
         
         <p className="text-sm text-gray-700 flex-grow mb-4">{sala.description}</p>
@@ -76,25 +83,41 @@ export function RoomCards({ sala }: IRoomCardProps) {
         </div>
 
         {/* Ações */}
-        <div className="flex items-center justify-between">
-          {/* Select de status */}
-          <select className="px-14 py-3 border rounded-md text-sm">
-            <option>Reservada</option>
-            <option>Ocupado</option>
-            <option>Manutenção</option>
-          </select>
-
-          {/* Botões */}
-          <div className="flex gap-3">
-            <button className="p-3 border rounded-md bg-gray-100 hover:bg-gray-200">
-              <FaEdit className="text-gray-600" />
-            </button>
-            <button className="p-3 border rounded-md bg-gray-100 hover:bg-gray-200">
-              <FaTrash className="text-red-500" />
-            </button>
+        {userRole === "Admin" && (
+          <div className="flex items-center justify-between gap-3">
+            <select className="px-14 py-3 border rounded-md text-sm">
+              <option>Reservada</option>
+              <option>Disponível</option>
+              <option>Manutenção</option>
+            </select>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setEditOpen(true)}
+                className="p-3 border rounded-md bg-gray-100 hover:bg-gray-200"
+              >
+                <FaEdit className="text-gray-600" />
+              </button>
+              <button
+                onClick={() => setDeleteOpen(true)}
+                className="p-3 border rounded-md bg-gray-100 hover:bg-gray-200"
+              >
+                <FaTrash className="text-red-500" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Modais */}
+      <EditRoomModal sala={sala} isOpen={isEditOpen} onClose={() => setEditOpen(false)} />
+      <DeleteRoomModal
+        isOpen={isDeleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={() => {
+          console.log("Sala excluída:", sala.id);
+          setDeleteOpen(false);
+        }}
+      />
     </div>
   );
 }
