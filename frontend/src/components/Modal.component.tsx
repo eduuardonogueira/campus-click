@@ -68,10 +68,16 @@ export function EditRoomModal({
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
-                type="number"
-                value={capacity}
-                onChange={e => setCapacity(Number(e.target.value))}
-                className="w-20 border rounded p-2 w-full min-w-[30px]"
+                type="text"
+                value={capacity === 0 ? "" : capacity}
+                onChange={e => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) { 
+                    setCapacity(value === "" ? 0 : Number(value));
+                  }
+                }}
+                className="border rounded p-2 min-w-[60px] [appearance:textfield]"
+                inputMode="numeric" 
               />
             </div>
           </div>
@@ -131,8 +137,8 @@ export function EditRoomModal({
                       )
                     }
                     className={`border flex items-center gap-1 px-2 py-1 rounded text-x font-medium transition ${isSelected
-                        ? "bg-black text-white"
-                        : "text-black-700 hover:bg-gray-200"
+                      ? "bg-black text-white"
+                      : "text-black-700 hover:bg-gray-200"
                       }`}
                   >
                     {amenityIcons[amenity]}
