@@ -14,7 +14,10 @@ export class RoomService {
   async create(createRoomDto: CreateRoomDto) {
     console.log('DTO recebido:', createRoomDto);
     // Checagem manual para garantir que capacity é um número válido
-    if (typeof createRoomDto.capacity !== 'number' || isNaN(createRoomDto.capacity)) {
+    if (
+      typeof createRoomDto.capacity !== 'number' ||
+      isNaN(createRoomDto.capacity)
+    ) {
       throw new HttpException('Capacity must be a valid number', 400);
     }
     const room = this.roomRepository.create(createRoomDto);
@@ -38,7 +41,8 @@ export class RoomService {
   async update(id: number, updateRoomDto: UpdateRoomDto) {
     const room = await this.findOne(id);
 
-  if (updateRoomDto.roomName !== undefined) room.roomName = updateRoomDto.roomName;
+    if (updateRoomDto.roomName !== undefined)
+      room.roomName = updateRoomDto.roomName;
     if (updateRoomDto.capacity !== undefined)
       room.capacity = updateRoomDto.capacity;
     if (updateRoomDto.status !== undefined) room.status = updateRoomDto.status;

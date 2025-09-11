@@ -16,7 +16,6 @@ export class CreateRoomDto {
   @IsNotEmpty()
   status: string; // por enquanto string depois mudo pra enum
 
-
   @IsOptional()
   @IsString()
   description: string | null;
