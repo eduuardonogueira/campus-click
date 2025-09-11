@@ -1,7 +1,7 @@
 export default () => ({
   port: parseInt(process.env.BACKEND_PORT ?? '3001', 10),
   dbHost: process.env.DB_HOST,
-  dbPort: parseInt(process.env.DB_PORT ?? '25893', 10),
+  dbPort: parseInt(process.env.DB_PORT ?? '5432', 10),
   dbName: process.env.DB_NAME,
   dbUser: process.env.DB_USER,
   dbPass: process.env.DB_PASS,
