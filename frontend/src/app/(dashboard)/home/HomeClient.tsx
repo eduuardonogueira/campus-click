@@ -7,9 +7,8 @@ import StatsCard from "@/app/(dashboard)/home/StatsCard";
 import { statsMock } from "@/app/(dashboard)/home/mock";
 
 export default function HomeClient() {
-  const { userRole } = useUser();
-  const { actionCardData } = useHomeData(userRole);
-
+  const { actionCardData } = useHomeData();
+  
   return (
     <>
       <section className="flex flex-col gap-2 items-center mt-10">

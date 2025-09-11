@@ -1,4 +1,3 @@
-// src/hooks/useHomeData.ts
 import {
   ROOMS_ROUTE,
   ADMIN_ROUTE,
@@ -19,7 +18,9 @@ type ActionCardItem = {
   icon: IconType;
 };
 
-export function useHomeData(userRole: UserRole): { actionCardData: ActionCardItem[] } {
+export function useHomeData(): { actionCardData: ActionCardItem[] } {
+  let userRole: UserRole = "user"; // trocar para "admin" para testar
+
   const actionCardData: ActionCardItem[] = [
     {
       title: "Reserva de Salas",
@@ -35,16 +36,17 @@ export function useHomeData(userRole: UserRole): { actionCardData: ActionCardIte
       link: RESERVATIONS_ROUTE,
       icon: FaCalendarCheck,
     },
-    ...(userRole === "admin"
-      ? [{
-          title: "Painel de Administração",
-          text: "Gerencie salas, usuários e configurações do sistema",
-          buttonText: "Gerenciar sistema",
-          link: ADMIN_ROUTE,
-          icon: FaGear,
-        }]
-      : []),
   ];
+
+  if (userRole === "user") {
+    actionCardData.push({
+      title: "Painel de Administração",
+      text: "Gerencie salas, usuários e configurações do sistema",
+      buttonText: "Gerenciar sistema",
+      link: ADMIN_ROUTE,
+      icon: FaGear,
+    });
+  }
 
   return { actionCardData };
 }
