@@ -1,7 +1,7 @@
 import { Calendar } from 'lucide-react';
 import { ReservationCard } from '@/components/ReservationCard.component';
 import { mockReservations } from './mock';
-import { EmptyState } from '@/components/EmptyReservations/EmptyReservations';
+import { EmptyReservations } from '@/components/EmptyReservations/EmptyReservations';
 import { ROOMS_ROUTE } from '@/constants/routes'; 
 
 export default function MyReservationsPage() {
@@ -29,7 +29,7 @@ export default function MyReservationsPage() {
             ))}
           </div>
         ) : (
-          <EmptyState
+          <EmptyReservations
             title="Sem Reservas Atualmente"
             message="Você não agendou nenhuma sala no momento"
             buttonText="Agendar Agora"

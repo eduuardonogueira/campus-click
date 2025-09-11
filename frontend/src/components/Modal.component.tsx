@@ -28,14 +28,14 @@ export function EditRoomModal({
   const [location, setLocation] = useState(sala.location);
   const [capacity, setCapacity] = useState(sala.capacity);
   const [description, setDescription] = useState(sala.description);
-  const [status, setStatus] = useState(sala.status);
+  const [status, setStatus] = useState<"Disponivel" | "Ocupado" | "Manutencao">(sala.status as "Disponivel" | "Ocupado" | "Manutencao");
   const [amenities, setAmenities] = useState<Amenity[]>(sala.amenities || []);
 
   if (!isOpen) return null;
 
   const toggleAmenity = (amenity: Amenity) => {
-    setAmenities(prev =>
-      prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
+    setAmenities((prev) =>
+      prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
     );
   };
 
@@ -59,7 +59,7 @@ export function EditRoomModal({
               <input
                 type="text"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 className="w-40 border rounded p-2 w-full min-w-[250px]"
               />
             </div>
@@ -70,7 +70,7 @@ export function EditRoomModal({
               <input
                 type="number"
                 value={capacity}
-                onChange={e => setCapacity(Number(e.target.value))}
+                onChange={(e) => setCapacity(Number(e.target.value))}
                 className="w-20 border rounded p-2 w-full min-w-[30px]"
               />
             </div>
@@ -82,7 +82,7 @@ export function EditRoomModal({
             <input
               type="text"
               value={location}
-              onChange={e => setLocation(e.target.value)}
+              onChange={(e) => setLocation(e.target.value)}
               className="w-full border rounded p-2"
             />
           </div>
@@ -92,7 +92,7 @@ export function EditRoomModal({
             <label className="block text-sm font-medium mb-1">Descrição</label>
             <textarea
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full border rounded p-2"
             />
           </div>
@@ -102,12 +102,17 @@ export function EditRoomModal({
             <label className="block text-sm font-medium mb-1">Status</label>
             <select
               value={status}
-              onChange={e => setStatus(e.target.value)}
+              onChange={(e) => {
+                const selectedValue = e.target.value;
+                if (['Disponivel', 'Ocupado', 'Manutencao'].includes(selectedValue)) {
+                  setStatus(selectedValue as "Disponivel" | "Ocupado" | "Manutencao");
+                }
+              }}
               className="min-w-[60px] border rounded p-2"
             >
-              <option>Disponível</option>
-              <option>Reservada</option>
-              <option>Manutenção</option>
+              <option value="Disponivel">Disponível</option>
+              <option value="Ocupado">Ocupado</option>
+              <option value="Manutencao">Manutenção</option>
             </select>
           </div>
 
@@ -123,17 +128,10 @@ export function EditRoomModal({
                   <button
                     key={amenity}
                     type="button"
-                    onClick={() =>
-                      setAmenities((prev) =>
-                        prev.includes(amenity)
-                          ? prev.filter((a) => a !== amenity)
-                          : [...prev, amenity]
-                      )
-                    }
-                    className={`border flex items-center gap-1 px-2 py-1 rounded text-x font-medium transition ${isSelected
-                        ? "bg-black text-white"
-                        : "text-black-700 hover:bg-gray-200"
-                      }`}
+                    onClick={() => toggleAmenity(amenity)}
+                    className={`border flex items-center gap-1 px-2 py-1 rounded text-x font-medium transition ${
+                      isSelected ? "bg-black text-white" : "text-black-700 hover:bg-gray-200"
+                    }`}
                   >
                     {amenityIcons[amenity]}
                     {amenity}
@@ -142,7 +140,6 @@ export function EditRoomModal({
               })}
             </div>
           </div>
-
 
           {/* Botões */}
           <div className="flex justify-end gap-3 mt-4">
@@ -165,8 +162,17 @@ export function EditRoomModal({
     </div>
   );
 }
+
 // Modal de confirmação para exclusão
-export function DeleteRoomModal({ isOpen, onClose, onConfirm }: { isOpen: boolean; onClose: () => void; onConfirm: () => void }) {
+export function DeleteRoomModal({
+  isOpen,
+  onClose,
+  onConfirm,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
   if (!isOpen) return null;
 
   return (
