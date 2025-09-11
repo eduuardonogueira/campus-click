@@ -1,12 +1,8 @@
 "use client";
-import {
-  FaTv,
-  FaChalkboardTeacher,
-  FaWifi,
-  FaVideo,
-} from "react-icons/fa";
+
+import { FaTv, FaChalkboardTeacher, FaWifi, FaVideo } from "react-icons/fa";
 import { useState } from "react";
-import { IRoom, Amenity } from "@/types/room";
+import { IRoom, Amenity, RoomStatus } from "@/types/room";
 
 const amenityIcons: Record<Amenity, React.ReactNode> = {
   Projetor: <FaTv />,
@@ -14,6 +10,8 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
   Wifi: <FaWifi />,
   "Vídeo Conferência": <FaVideo />,
 };
+
+const STATUS_OPTIONS: RoomStatus[] = ["Disponível", "Ocupado", "Manutenção"];
 
 export function EditRoomModal({
   sala,
@@ -28,7 +26,7 @@ export function EditRoomModal({
   const [location, setLocation] = useState(sala.location);
   const [capacity, setCapacity] = useState(sala.capacity);
   const [description, setDescription] = useState(sala.description);
-  const [status, setStatus] = useState<"Disponivel" | "Ocupado" | "Manutencao">(sala.status as "Disponivel" | "Ocupado" | "Manutencao");
+  const [status, setStatus] = useState<RoomStatus>(sala.status);
   const [amenities, setAmenities] = useState<Amenity[]>(sala.amenities || []);
 
   if (!isOpen) return null;
@@ -41,7 +39,7 @@ export function EditRoomModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui você pode enviar os dados atualizados para o backend ou atualizar o estado pai
+    // enviar para o estado pai conforme nossa arquitetura
     console.log({ name, location, capacity, description, status, amenities });
     onClose();
   };
@@ -52,7 +50,7 @@ export function EditRoomModal({
         <h2 className="text-xl font-bold mb-4">Editar Sala</h2>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Nome */}
+          {/* Nome + Capacidade */}
           <div className="flex gap-4">
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Nome da Sala</label>
@@ -60,18 +58,17 @@ export function EditRoomModal({
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-40 border rounded p-2 w-full min-w-[250px]"
+                className="border rounded p-2 w-full min-w-[250px]"
               />
             </div>
 
-            {/* Capacidade */}
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
                 type="number"
                 value={capacity}
                 onChange={(e) => setCapacity(Number(e.target.value))}
-                className="w-20 border rounded p-2 w-full min-w-[30px]"
+                className="border rounded p-2 w-full min-w-[80px]"
               />
             </div>
           </div>
@@ -97,22 +94,19 @@ export function EditRoomModal({
             />
           </div>
 
-          {/* Status */}
+          {/* Status (tipado) */}
           <div>
             <label className="block text-sm font-medium mb-1">Status</label>
             <select
               value={status}
-              onChange={(e) => {
-                const selectedValue = e.target.value;
-                if (['Disponivel', 'Ocupado', 'Manutencao'].includes(selectedValue)) {
-                  setStatus(selectedValue as "Disponivel" | "Ocupado" | "Manutencao");
-                }
-              }}
-              className="min-w-[60px] border rounded p-2"
+              onChange={(e) => setStatus(e.target.value as RoomStatus)}
+              className="min-w-[120px] border rounded p-2"
             >
-              <option value="Disponivel">Disponível</option>
-              <option value="Ocupado">Ocupado</option>
-              <option value="Manutencao">Manutenção</option>
+              {STATUS_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -129,8 +123,8 @@ export function EditRoomModal({
                     key={amenity}
                     type="button"
                     onClick={() => toggleAmenity(amenity)}
-                    className={`border flex items-center gap-1 px-2 py-1 rounded text-x font-medium transition ${
-                      isSelected ? "bg-black text-white" : "text-black-700 hover:bg-gray-200"
+                    className={`border flex items-center gap-1 px-2 py-1 rounded text-sm font-medium transition ${
+                      isSelected ? "bg-black text-white" : "text-gray-700 hover:bg-gray-200"
                     }`}
                   >
                     {amenityIcons[amenity]}
@@ -152,7 +146,7 @@ export function EditRoomModal({
             </button>
             <button
               type="submit"
-              className="border px-4 py-2 bg-black text-white rounded hover:invert-100"
+              className="border px-4 py-2 bg-black text-white rounded hover:invert"
             >
               Salvar Edição
             </button>
