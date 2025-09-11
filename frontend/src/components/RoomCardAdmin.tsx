@@ -11,9 +11,10 @@ import {
   FaVideo,
   FaEdit,
   FaTrash,
+  FaChevronDown,
 } from "react-icons/fa";
 import { Amenity, IRoom } from "@/types/room";
-import { EditRoomModal, DeleteRoomModal } from "@/components/Modal.component";
+import { EditRoomModal, DeleteRoomModal } from "@/components/EditRoomModal.component";
 
 interface IRoomCardProps {
   sala: IRoom;
@@ -32,9 +33,9 @@ export function RoomCards({ sala, userRole }: IRoomCardProps) {
   const [isDeleteOpen, setDeleteOpen] = useState(false);
 
   const statusClass = {
-    Disponível: "bg-green-300 text-white",
-    Ocupado: "bg-yellow-300 text-gray-900",
-    Manutenção: "bg-red-300 text-white",
+    Disponível: "bg-green-200 text-green-900 border",
+    Ocupado: "bg-yellow-200 text-yellow-900 border",
+    Manutenção: "bg-red-200 text-red-900 border",
   }[sala.status];
 
   return (
@@ -58,15 +59,15 @@ export function RoomCards({ sala, userRole }: IRoomCardProps) {
         <h3 className="text-lg font-semibold mb-2">{sala.name}</h3>
 
         <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
-          <FaMapMarkerAlt className="inline w-4 h-4 mr-1" /> 
-          <p>{sala.location}</p> 
+          <FaMapMarkerAlt className="inline w-4 h-4 mr-1" />
+          <p>{sala.location}</p>
         </div>
 
         <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
-          <FaUsers className="inline w-4 h-4 mr-1" /> 
-          <p>{sala.capacity} Pessoas</p> 
+          <FaUsers className="inline w-4 h-4 mr-1" />
+          <p>{sala.capacity} Pessoas</p>
         </div>
-        
+
         <p className="text-sm text-gray-700 flex-grow mb-4">{sala.description}</p>
 
         {/* Tags / Amenidades */}
@@ -85,26 +86,34 @@ export function RoomCards({ sala, userRole }: IRoomCardProps) {
         {/* Ações */}
         {userRole === "Admin" && (
           <div className="flex items-center justify-between gap-3">
-            <select className="px-14 py-3 border rounded-md text-sm">
-              <option>Reservada</option>
-              <option>Disponível</option>
-              <option>Manutenção</option>
-            </select>
+            {/* Select customizado */}
+            <div className="relative">
+              <select className="w-52 h-10 border border-gray-600 rounded-md text-sm text-gray-500">
+                <option>Reservada</option>
+                <option>Disponível</option>
+                <option>Manutenção</option>
+              </select>
+              {/* Ícone da seta */}
+              
+            </div>
+
+            {/* Botões de ação */}
             <div className="flex gap-3">
               <button
                 onClick={() => setEditOpen(true)}
-                className="p-3 border rounded-md bg-gray-100 hover:bg-gray-200"
+                className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
               >
-                <FaEdit className="text-gray-600" />
+                <FaEdit className="text-gray-500" />
               </button>
               <button
                 onClick={() => setDeleteOpen(true)}
-                className="p-3 border rounded-md bg-gray-100 hover:bg-gray-200"
+                className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
               >
-                <FaTrash className="text-red-500" />
+                <FaTrash className="text-gray-500" />
               </button>
             </div>
           </div>
+
         )}
       </div>
 

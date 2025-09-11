@@ -4,6 +4,7 @@ import {
   FaChalkboardTeacher,
   FaWifi,
   FaVideo,
+  FaChevronDown,
 } from "react-icons/fa";
 import { useState } from "react";
 import { IRoom, Amenity } from "@/types/room";
@@ -49,7 +50,8 @@ export function EditRoomModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6">
-        <h2 className="text-xl font-bold mb-4">Editar Sala</h2>
+        <h2 className="text-xl font-bold">Editar Sala</h2>
+        <p className="text-gray-400 mb-4">Atualize e configure as informações da sala</p>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Nome */}
@@ -60,7 +62,7 @@ export function EditRoomModal({
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="w-40 border rounded p-2 w-full min-w-[250px]"
+                className="w-40 border rounded-xl border-gray-300 p-2 w-full min-w-[250px] text-sm text-gray-600"
               />
             </div>
 
@@ -76,7 +78,7 @@ export function EditRoomModal({
                     setCapacity(value === "" ? 0 : Number(value));
                   }
                 }}
-                className="border rounded p-2 min-w-[60px] [appearance:textfield]"
+                className="border rounded-xl border-gray-300 p-2 min-w-[60px] text-sm text-gray-600 [appearance:textfield]"
                 inputMode="numeric" 
               />
             </div>
@@ -89,17 +91,17 @@ export function EditRoomModal({
               type="text"
               value={location}
               onChange={e => setLocation(e.target.value)}
-              className="w-full border rounded p-2"
+              className="w-full border rounded-xl border-gray-300 p-2 text-sm text-gray-600"
             />
           </div>
 
           {/* Descrição */}
           <div>
-            <label className="block text-sm font-medium mb-1">Descrição</label>
+            <label className="block text-sm font-medium">Descrição</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full border rounded p-2"
+              className="w-full h-20 border rounded-xl border-gray-300 p-2 text-sm text-gray-600"
             />
           </div>
 
@@ -109,17 +111,19 @@ export function EditRoomModal({
             <select
               value={status}
               onChange={e => setStatus(e.target.value)}
-              className="min-w-[60px] border rounded p-2"
+              className="min-w-[60px] h-10 border border-gray-300 text-sm rounded-xl border-gray-300 p-2 text-sm text-gray-600 appearance-none pr-10 pl-3"
             >
               <option>Disponível</option>
               <option>Reservada</option>
               <option>Manutenção</option>
             </select>
+            {/* Ícone da seta */}
+            <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-200 pointer-events-none" />
           </div>
 
           {/* Amenities */}
           <div>
-            <label className="block text-sm font-medium mb-2">Amenities</label>
+            <label className="block text-sm font-medium mb-2">Recursos</label>
             <div className="flex flex-wrap gap-2 mb-6">
               {Object.keys(amenityIcons).map((amenityKey) => {
                 const amenity = amenityKey as Amenity;
@@ -136,8 +140,8 @@ export function EditRoomModal({
                           : [...prev, amenity]
                       )
                     }
-                    className={`border flex items-center gap-1 px-2 py-1 rounded text-x font-medium transition ${isSelected
-                      ? "bg-black text-white"
+                    className={`flex bg-gray-200 items-center gap-1 px-2 py-1 rounded-xl text-sm text-gray-600 font-medium transition ${isSelected
+                      ? "bg-gray-900 text-white"
                       : "text-black-700 hover:bg-gray-200"
                       }`}
                   >
@@ -155,15 +159,15 @@ export function EditRoomModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              className="px-4 py-2 border border-gray-400 bg-white rounded hover:bg-gray-300"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="border px-4 py-2 bg-black text-white rounded hover:invert-100"
+              className="border px-4 py-2 bg-black text-white rounded hover:invert"
             >
-              Salvar Edição
+              Atualizar
             </button>
           </div>
         </form>
@@ -177,9 +181,10 @@ export function DeleteRoomModal({ isOpen, onClose, onConfirm }: { isOpen: boolea
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-[650px] p-6">
         <h2 className="text-xl font-bold mb-4">Excluir Sala</h2>
-        <p className="mb-6">Tem certeza que deseja excluir esta sala?</p>
+        <p className="">Tem certeza que deseja excluir?</p>
+        <p className="mb-4">Esta ação não pode ser desfeita e cancelará todas as reservas associadas.</p>
 
         <div className="flex justify-end gap-3">
           <button
