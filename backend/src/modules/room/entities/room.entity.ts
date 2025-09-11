@@ -1,29 +1,34 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-
-@Entity("Room")
+@Entity('Room')
 export class Room {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  roomName: string;
 
-    @Column()
-    locationBloco: string; // Pavilhão, Bloco, Prédio
+  @Column()
+  capacity: number;
 
-    @Column()
-    locationAndar: string; // Andar, Piso
+  @Column()
+  location: string;
 
-    @Column("text", { array: true })
-    amenities: string[]; // Lista do id
-    
-    // @Column()
-    // bookings: Booking[];
+  @Column()
+  status: string; // por enquanto string depois mudo pra enum
 
-    @Column()
-    createdAt: Date;
+  @Column({ type: 'text', nullable: true })
+  description: string | null;
 
-    @Column()
-    updatedAt: Date;
+  @Column({ type: 'text', nullable: true })
+  imageUrl: string | null;
+
+  @Column({ type: 'timestamp' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  updatedAt: Date | null;
+
+  @Column()
+  type: string; // por enquanto string depois mudo pra enum
 }

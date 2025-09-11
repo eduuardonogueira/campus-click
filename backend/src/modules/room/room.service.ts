@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,12 +7,19 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class RoomService {
-  constructor(@InjectRepository(Room) private roomRepository: Repository<Room>) {}
-  
+  constructor(
+    @InjectRepository(Room) private roomRepository: Repository<Room>,
+  ) {}
+
   async create(createRoomDto: CreateRoomDto) {
-    let room = this.roomRepository.create(createRoomDto);
+    console.log('DTO recebido:', createRoomDto);
+    // Checagem manual para garantir que capacity é um número válido
+    if (typeof createRoomDto.capacity !== 'number' || isNaN(createRoomDto.capacity)) {
+      throw new HttpException('Capacity must be a valid number', 400);
+    }
+    const room = this.roomRepository.create(createRoomDto);
     room.createdAt = new Date();
-    room.updatedAt = new Date();
+    room.updatedAt = null;
     return await this.roomRepository.save(room);
   }
 
@@ -23,22 +30,25 @@ export class RoomService {
   async findOne(id: number) {
     const room = await this.roomRepository.findOne({ where: { id } });
     if (!room) {
-      throw new Error(`Room with ID ${id} not found`);
+      throw new HttpException(`Room with ID ${id} not found`, 404);
     }
     return room;
   }
 
   async update(id: number, updateRoomDto: UpdateRoomDto) {
-    const room = await this.findOne( id ); // mudei aqui (qualquer coisa volta o normal)
-    // const room = await this.roomRepository.findOne({ where: { id } });
-    // if (!room) {
-    //   throw new Error(`Room with ID ${id} not found`);
-    // }
+    const room = await this.findOne(id);
 
-    if (updateRoomDto.name !== undefined) room.name = updateRoomDto.name;
-    if (updateRoomDto.locationBloco !== undefined) room.locationBloco = updateRoomDto.locationBloco;
-    if (updateRoomDto.locationAndar !== undefined) room.locationAndar = updateRoomDto.locationAndar;
-    if (updateRoomDto.amenities !== undefined) room.amenities = updateRoomDto.amenities;
+  if (updateRoomDto.roomName !== undefined) room.roomName = updateRoomDto.roomName;
+    if (updateRoomDto.capacity !== undefined)
+      room.capacity = updateRoomDto.capacity;
+    if (updateRoomDto.status !== undefined) room.status = updateRoomDto.status;
+    if (updateRoomDto.description !== undefined)
+      room.description = updateRoomDto.description;
+    if (updateRoomDto.imageUrl !== undefined)
+      room.imageUrl = updateRoomDto.imageUrl;
+    if (updateRoomDto.type !== undefined) room.type = updateRoomDto.type;
+    if (updateRoomDto.location !== undefined)
+      room.location = updateRoomDto.location;
 
     room.updatedAt = new Date();
 
@@ -46,12 +56,10 @@ export class RoomService {
   }
 
   async remove(id: number) {
-    const room = await this.roomRepository.findOne({ where: { id } });
+    const room = await this.findOne(id);
     if (!room) {
-      throw new Error(`Room with ID ${id} not found`);
+      throw new HttpException(`Room with ID ${id} not found`, 404);
     }
     return await this.roomRepository.delete(id);
   }
-
-  
 }
