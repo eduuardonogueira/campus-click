@@ -8,23 +8,16 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class RoomService {
   constructor(
-    @InjectRepository(Room) private roomRepository: Repository<Room>,
+    @InjectRepository(Room)
+    private roomRepository: Repository<Room>,
   ) {}
 
-  async create(createRoomDto: CreateRoomDto) {
-    console.log('DTO recebido:', createRoomDto);
-    // Checagem manual para garantir que capacity é um número válido
-    if (typeof createRoomDto.capacity !== 'number' || isNaN(createRoomDto.capacity)) {
-      throw new HttpException('Capacity must be a valid number', 400);
+  async findAll() {
+    const findedRooms = await this.roomRepository.find();
+    if (!findedRooms) {
+      throw new HttpException(`Rooms Not Found`, 404);
     }
-    const room = this.roomRepository.create(createRoomDto);
-    room.createdAt = new Date();
-    room.updatedAt = null;
-    return await this.roomRepository.save(room);
-  }
-
-  findAll() {
-    return this.roomRepository.find();
+    return findedRooms;
   }
 
   async findOne(id: number) {
@@ -35,31 +28,30 @@ export class RoomService {
     return room;
   }
 
+  async create(createRoomDto: CreateRoomDto) {
+    const room = this.roomRepository.create({
+      ...createRoomDto,
+      createdAt: new Date(),
+    });
+    return await this.roomRepository.save(room);
+  }
+
   async update(id: number, updateRoomDto: UpdateRoomDto) {
-    const room = await this.findOne(id);
+    const room = await this.roomRepository.preload({
+      id,
+      ...updateRoomDto,
+      updatedAt: new Date(),
+    });
 
-  if (updateRoomDto.roomName !== undefined) room.roomName = updateRoomDto.roomName;
-    if (updateRoomDto.capacity !== undefined)
-      room.capacity = updateRoomDto.capacity;
-    if (updateRoomDto.status !== undefined) room.status = updateRoomDto.status;
-    if (updateRoomDto.description !== undefined)
-      room.description = updateRoomDto.description;
-    if (updateRoomDto.imageUrl !== undefined)
-      room.imageUrl = updateRoomDto.imageUrl;
-    if (updateRoomDto.type !== undefined) room.type = updateRoomDto.type;
-    if (updateRoomDto.location !== undefined)
-      room.location = updateRoomDto.location;
-
-    room.updatedAt = new Date();
+    if (!room) {
+      throw new HttpException(`Room with ID ${id} not found`, 404);
+    }
 
     return this.roomRepository.save(room);
   }
 
   async remove(id: number) {
-    const room = await this.findOne(id);
-    if (!room) {
-      throw new HttpException(`Room with ID ${id} not found`, 404);
-    }
-    return await this.roomRepository.delete(id);
+    const foundRoom = await this.findOne(id);
+    return this.roomRepository.delete(foundRoom.id);
   }
 }
