@@ -140,13 +140,13 @@ export function EditRoomModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="border px-4 py-2 bg-black text-white rounded hover:invert"
+              className="border px-4 py-2 bg-black text-white rounded hover:invert cursor-pointer"
             >
               Salvar Edição
             </button>
@@ -178,13 +178,13 @@ export function DeleteRoomModal({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-black"
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-black cursor-pointer"
           >
             Excluir
           </button>
