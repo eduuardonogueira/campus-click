@@ -11,7 +11,6 @@ import { User } from '../user/entities/user.entity';
 import configuration from '../../config/configuration';
 import { Amenity } from 'src/modules/amenities/entities/amenity.entity';
 
-
 const config = configuration();
 
 @Module({
@@ -20,8 +19,8 @@ const config = configuration();
       type: 'postgres',
       host: config.dbHost,
       port: config.dbPort,
-  username: config.dbUser,
-  password: config.dbPass,
+      username: config.dbUser,
+      password: config.dbPass,
       database: config.dbName,
       entities: [Room, Booking, User, Amenity],
       synchronize: true,
@@ -29,7 +28,7 @@ const config = configuration();
         rejectUnauthorized: false,
       },
     }),
-    RoomModule
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

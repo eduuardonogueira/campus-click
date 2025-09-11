@@ -1,25 +1,25 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity("Booking")
+@Entity('Booking')
 export class Booking {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    userId: number;
+  @Column()
+  userId: number;
 
-    @Column()
-    roomId: number;
+  @Column()
+  roomId: number;
 
-    @Column()
-    startTime: Date;
+  @Column()
+  startTime: Date;
 
-    @Column()
-    endTime: Date;
+  @Column()
+  endTime: Date;
 
-    @Column()
-    createdAt: Date;
+  @Column()
+  createdAt: Date;
 
-    @Column()
-    updatedAt: Date;
+  @Column()
+  updatedAt: Date;
 }

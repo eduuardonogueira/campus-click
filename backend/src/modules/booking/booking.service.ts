@@ -7,8 +7,10 @@ import { Booking } from './entities/booking.entity';
 
 @Injectable()
 export class BookingService {
-  constructor(@InjectRepository(Booking) private bookingRepository: Repository<Booking>) {}
-  
+  constructor(
+    @InjectRepository(Booking) private bookingRepository: Repository<Booking>,
+  ) {}
+
   create(createBookingDto: CreateBookingDto) {
     return this.bookingRepository.save(createBookingDto);
   }
