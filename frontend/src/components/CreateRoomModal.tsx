@@ -1,154 +1,165 @@
 "use client";
 import { useState } from "react";
 import { Amenity } from "@/types/room";
-import { FaTv, FaChalkboardTeacher, FaWifi, FaVideo } from "react-icons/fa";
+import { FaTv, FaChalkboardTeacher, FaWifi, FaVideo, FaChevronDown } from "react-icons/fa";
 
 const amenityIcons: Record<Amenity, React.ReactNode> = {
-    Projetor: <FaTv />,
-    Quadro: <FaChalkboardTeacher />,
-    Wifi: <FaWifi />,
-    "Vídeo Conferência": <FaVideo />,
+  Projetor: <FaTv />,
+  Quadro: <FaChalkboardTeacher />,
+  Wifi: <FaWifi />,
+  "Vídeo Conferência": <FaVideo />,
 };
 
 export function CreateRoomModal({
-    isOpen,
-    onClose,
+  isOpen,
+  onClose,
 }: {
-    isOpen: boolean;
-    onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }) {
-    const [name, setName] = useState("");
-    const [location, setLocation] = useState("");
-    const [capacity, setCapacity] = useState(0);
-    const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("Disponível");
-    const [amenities, setAmenities] = useState<Amenity[]>([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    location: "",
+    capacity: 0,
+    description: "",
+    status: "Disponível",
+    amenities: [] as Amenity[],
+  });
 
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Nova Sala:", { name, location, capacity, description, status, amenities });
-        onClose();
-    };
+  const handleChange = (field: string, value: string | number | Amenity[]) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
-    return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Criar Nova Sala</h2>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Nova Sala:", formData);
+    onClose();
+  };
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    {/* Nome + Capacidade */}
-                    <div className="flex gap-4">
-                        <div className="flex flex-col">
-                            <label className="text-sm font-medium mb-1">Nome da Sala</label>
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                                className="border rounded p-2 min-w-[250px]"
-                            />
-                        </div>
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6">
+        <h2 className="text-xl font-bold">Criar Nova Sala</h2>
+        <p className="text-gray-400 mb-4">Crie e configure as informações da sala</p>
 
-                        <div className="flex flex-col">
-                            <label className="text-sm font-medium mb-1">Capacidade</label>
-                            <input
-                                type="text"
-                                value={capacity === 0 ? "" : capacity}
-                                onChange={e => {
-                                    const value = e.target.value;
-                                    if (/^\d*$/.test(value)) {
-                                        setCapacity(value === "" ? 0 : Number(value));
-                                    }
-                                }}
-                                className="border rounded p-2 min-w-[60px] [appearance:textfield]"
-                                inputMode="numeric"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Localização */}
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Localização</label>
-                        <input
-                            type="text"
-                            value={location}
-                            onChange={e => setLocation(e.target.value)}
-                            className="w-full border rounded p-2"
-                        />
-                    </div>
-
-                    {/* Descrição */}
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Descrição</label>
-                        <textarea
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                            className="w-full border rounded p-2"
-                        />
-                    </div>
-
-                    {/* Status */}
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Status</label>
-                        <select
-                            value={status}
-                            onChange={e => setStatus(e.target.value)}
-                            className="border rounded p-2"
-                        >
-                            <option>Disponível</option>
-                            <option>Reservada</option>
-                            <option>Manutenção</option>
-                        </select>
-                    </div>
-
-                    {/* Amenities */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Amenities</label>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                            {Object.keys(amenityIcons).map((amenityKey) => {
-                                const amenity = amenityKey as Amenity;
-                                const isSelected = amenities.includes(amenity);
-
-                                return (
-                                    <button
-                                        key={amenity}
-                                        type="button"
-                                        onClick={() =>
-                                            setAmenities((prev) =>
-                                                prev.includes(amenity)
-                                                    ? prev.filter((a) => a !== amenity)
-                                                    : [...prev, amenity]
-                                            )
-                                        }
-                                        className={`border flex items-center gap-1 px-2 py-1 rounded transition ${isSelected ? "bg-black text-white" : "hover:bg-gray-200"
-                                            }`}
-                                    >
-                                        {amenityIcons[amenity]} {amenity}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Botões */}
-                    <div className="flex justify-end gap-3 mt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            type="submit"
-                            className="border px-4 py-2 bg-black text-white rounded hover:invert"
-                        >
-                            Criar Sala
-                        </button>
-                    </div>
-                </form>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Nome + Capacidade */}
+          <div className="flex gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">Nome da Sala</label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+                className="border rounded-xl p-2 min-w-[250px] border-gray-300 text-sm text-gray-600"
+              />
             </div>
-        </div>
-    );
+
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">Capacidade</label>
+              <input
+                type="text"
+                value={formData.capacity === 0 ? "" : formData.capacity}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    handleChange("capacity", value === "" ? 0 : Number(value));
+                  }
+                }}
+                className="border rounded-xl p-2 min-w-[60px] [appearance:textfield] border-gray-300 text-sm text-gray-600"
+                inputMode="numeric"
+              />
+            </div>
+          </div>
+
+          {/* Localização */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Localização</label>
+            <input
+              type="text"
+              value={formData.location}
+              onChange={(e) => handleChange("location", e.target.value)}
+              className="w-full border rounded-xl p-2 border-gray-300 text-sm text-gray-600"
+            />
+          </div>
+
+          {/* Descrição */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Descrição</label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => handleChange("description", e.target.value)}
+              className="w-full border rounded-xl p-2 border-gray-300 text-sm text-gray-600 text-sm text-gray-600"
+            />
+          </div>
+
+          {/* Status */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Status</label>
+            <select
+              value={formData.status}
+              onChange={(e) => handleChange("status", e.target.value)}
+              className="border rounded-xl p-2 border-gray-300 text-gray-500 appearance-none pr-10 pl-3 text-sm text-gray-600"
+            >
+              <option>Disponível</option>
+              <option>Reservada</option>
+              <option>Manutenção</option>
+            </select>
+            {/* Ícone da seta */}
+            <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-200 pointer-events-none" />
+          </div>
+
+          {/* Amenities */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Amenities</label>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {Object.keys(amenityIcons).map((amenityKey) => {
+                const amenity = amenityKey as Amenity;
+                const isSelected = formData.amenities.includes(amenity);
+
+                return (
+                  <button
+                    key={amenity}
+                    type="button"
+                    onClick={() => {
+                      handleChange(
+                        "amenities",
+                        isSelected
+                          ? formData.amenities.filter((a) => a !== amenity)
+                          : [...formData.amenities, amenity]
+                      );
+                    }}
+                    className={`bg-gray-200 flex items-center gap-1 px-2 py-1 rounded-xl text-sm text-gray-600 transition ${
+                      isSelected ? "bg-gray-900 text-white" : "hover:bg-gray-300"
+                    }`}
+                  >
+                    {amenityIcons[amenity]} {amenity}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Botões */}
+          <div className="flex justify-end gap-3 mt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-gray-400 bg-white rounded hover:bg-gray-300"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="border px-4 py-2 w-23 bg-black text-white rounded hover:invert"
+            >
+              Criar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }

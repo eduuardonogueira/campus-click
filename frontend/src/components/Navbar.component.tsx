@@ -2,7 +2,7 @@
 
 import { HOME_ROUTE } from "@/constants/routes";
 import Link from "next/link";
-import { FaCalendarAlt, FaUserCircle, FaCog } from "react-icons/fa";
+import { FaCalendarAlt, FaUserCircle } from "react-icons/fa";
 import { LogoutButton } from "./index";
 
 interface INavbarProps {
@@ -11,11 +11,11 @@ interface INavbarProps {
 }
 
 export async function Navbar({
-  userName = "aluno.teste@discente.ufra.edu.br",
-  userRole = "aluno"
+  userName = "Aluno.teste@discente.ufra.edu.br",
+  userRole = "Aluno"
 }: INavbarProps) {
   return (
-    <header className="flex justify-between px-9 py-3 items-center border-b-gray-900 border-1">
+    <header className="flex justify-around px-9 py-3 items-center border-b-gray-900 border-1">
       <div className="flex items-center gap-2">
         <FaCalendarAlt className="text-2xl" />
         <Link href={HOME_ROUTE} className="text-2xl font-bold">
@@ -34,10 +34,7 @@ export async function Navbar({
           </div>
         </div>
 
-        <nav className="flex gap-8 text-gray-800">
-          <button className="hover:cursor-pointer" aria-label="Configurações">
-            <FaCog />
-          </button>
+        <nav className="flex gap-8 text-gray-400">
           <LogoutButton />
         </nav>
       </div>

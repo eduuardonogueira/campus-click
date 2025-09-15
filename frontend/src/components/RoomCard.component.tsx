@@ -22,9 +22,9 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
 
 export function RoomCard({ sala }: IRoomCardProps) {
   const statusClass = {
-    Disponível: "bg-green-600 text-white",
-    Ocupado: "bg-yellow-400 text-gray-900",
-    Manutenção: "bg-red-600 text-white",
+    Disponível: "bg-green-200 text-green-900 border",
+    Ocupado: "bg-yellow-200 text-yellow-900 border",
+    Manutenção: "bg-red-200 text-red-900 border",
   }[sala.status];
 
   const buttonInfo = {
