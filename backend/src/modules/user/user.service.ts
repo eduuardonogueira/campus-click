@@ -12,7 +12,7 @@ export class UserService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    let user = this.userRepository.create(createUserDto);
+    let user = this.userRepository.create(createUserDto as Partial<User>);
     user.createdAt = new Date();
     user.updatedAt = new Date();
     return this.userRepository.save(user);
