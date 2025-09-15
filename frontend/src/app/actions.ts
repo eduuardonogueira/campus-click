@@ -1,12 +1,13 @@
 "use server";
 
+import { AUTH_COOKIE_KEY } from "@/constants/cookies";
 import { LOGIN_ROUTE } from "@/constants/routes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function logout() {
   const cookieStore = await cookies();
-  cookieStore.delete("authToken");
+  cookieStore.delete(AUTH_COOKIE_KEY);
   redirect(LOGIN_ROUTE);
 }
 
@@ -16,7 +17,13 @@ export async function login(
 ): Promise<boolean> {
   if (username === "admin@admin" && password === "admin") {
     const cookieStore = await cookies();
-    cookieStore.set("authToken", "123");
+    cookieStore.set(AUTH_COOKIE_KEY, "admin");
+    return true;
+  }
+
+  if (username === "user@user" && password === "user") {
+    const cookieStore = await cookies();
+    cookieStore.set(AUTH_COOKIE_KEY, "user");
     return true;
   }
 

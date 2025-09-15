@@ -4,11 +4,23 @@ import { RoomCard } from "@/components/index";
 import { RoomCards } from "@/components/RoomCardAdmin";
 import { FaSearch, FaFilter } from "react-icons/fa";
 import { mockRooms } from "./mock";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { IUser } from "@/types/user";
+import { getProfile } from "@/api/index";
 
 export default function SalasPage() {
   const [search, setSearch] = useState("");
-  const userRole = "admin"; //Admin ou "User"
+  const [user, setUser] = useState<IUser | undefined>();
+
+  async function fetchUserProfile() {
+    const response = await getProfile();
+
+    if (response) setUser(response);
+  }
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
   const filteredSalas = mockRooms.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
@@ -20,14 +32,15 @@ export default function SalasPage() {
 
   return (
     <main className="max-w-[1200px] mx-auto p-8">
-      
       <header className="mb-8">
         <div>
           <h1 className="text-4xl font-bold">
-            {userRole === "admin" ? "Painel do Administrador" : "Salas"}
+            {user?.role === "admin" ? "Painel do Administrador" : "Salas"}
           </h1>
           <p className="text-gray-500 text-lg">
-            {userRole === "admin" ? "Crie, edite e gerencie salas" : "Faça a reserva da sua sala"}
+            {user?.role === "admin"
+              ? "Crie, edite e gerencie salas"
+              : "Faça a reserva da sua sala"}
           </p>
         </div>
       </header>
@@ -67,14 +80,14 @@ export default function SalasPage() {
       </div>
 
       <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
-  {filteredSalas.map((sala) =>
-    userRole === "admin" ? (
-      <RoomCards key={sala.id} sala={sala} userRole="Admin" />
-    ) : (
-      <RoomCard key={sala.id} sala={sala} />
-    )
-  )}
-</div>
+        {filteredSalas.map((sala) =>
+          user?.role === "admin" ? (
+            <RoomCards key={sala.id} sala={sala} userRole="Admin" />
+          ) : (
+            <RoomCard key={sala.id} sala={sala} />
+          )
+        )}
+      </div>
     </main>
   );
 }
