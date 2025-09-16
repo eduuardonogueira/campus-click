@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import {
   FaMapMarkerAlt,
@@ -99,4 +100,3 @@ export function RoomCard({ room }: IRoomCardProps) {
     </div>
   );
 }
-

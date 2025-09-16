@@ -55,14 +55,13 @@ export function EditRoomModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // enviar para o estado pai conforme nossa arquitetura
     console.log({ name, location, capacity, description, status, amenities });
     onClose();
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6 relative">
         <h2 className="text-xl font-bold">Editar Sala</h2>
         <p className="text-gray-400 mb-4">
           Atualize e configure as informações da sala
@@ -70,7 +69,7 @@ export function EditRoomModal({
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="flex gap-4">
-            <div className="flex flex-col">
+            <div className="flex flex-col flex-1">
               <label className="text-sm font-medium mb-1">Nome da Sala</label>
               <input
                 type="text"
@@ -140,14 +139,8 @@ export function EditRoomModal({
                   <button
                     key={amenity}
                     type="button"
-                    onClick={() =>
-                      setAmenities((prev) =>
-                        prev.includes(amenity)
-                          ? prev.filter((a) => a !== amenity)
-                          : [...prev, amenity]
-                      )
-                    }
-                    className={`flex bg-gray-200 items-center gap-1 px-2 py-1 rounded-md text-sm cursor-pointer text-gray-600 font-medium transition ${
+                    onClick={() => toggleAmenity(amenity)}
+                    className={`flex bg-gray-200 items-center gap-1 px-2 py-1 rounded-md text-sm cursor-pointer font-medium transition ${
                       isSelected
                         ? "bg-gray-900 text-white"
                         : "text-black-700 hover:bg-gray-200"
