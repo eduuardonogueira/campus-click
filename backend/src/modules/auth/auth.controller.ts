@@ -25,6 +25,10 @@ export class AuthController {
 
   @Post('signup')
   @ApiBody({ type: SignupDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário criado com sucesso.',
+  })
   async signup(@Body() body: SignupDto) {
     return this.authService.signup(body);
   }
