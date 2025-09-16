@@ -2,17 +2,22 @@
 
 import { useHomeData } from "@/hooks/useHomeData";
 import { useUser } from "@/hooks/useUser";
-import ActionCard from "@/app/(dashboard)/home/ActionCard";
-import StatsCard from "@/app/(dashboard)/home/StatsCard";
-import { statsMock } from "@/app/(dashboard)/home/mock";
+
+import ActionCard from "./ActionCard";
+import StatsCard from "./StatsCard";
+import { statsMock } from "./mock";
 
 export default function HomeClient() {
+  const { defaultUser } = useUser(); // ou admin, se for o caso
+
+  if (!defaultUser) return <p>Carregando...</p>;
+
   const { actionCardData } = useHomeData();
-  
+
   return (
     <>
       <section className="flex flex-col gap-2 items-center mt-10">
-        <h2 className="text-3xl font-bold">Seja Bem vindo ao Campus Click</h2>
+        <h2 className="text-3xl font-bold">Seja Bem-vindo ao Campus Click</h2>
         <h3 className="text-md text-gray-800">
           Gerenciamento e reserva de salas e laboratórios de forma simples,
           prática e acessível para toda a comunidade acadêmica.
