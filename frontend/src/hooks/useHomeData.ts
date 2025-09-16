@@ -10,7 +10,7 @@ import { FaGear } from "react-icons/fa6";
 export function useHomeData(userRole: string) {
   const actionCardData = [
     {
-      title: "Reserva de Salas",
+      title: "Buscar Salas",
       text: "Encontre e reserve salas ou laboratórios",
       buttonText: "Procurar salas disponíveis",
       link: ROOMS_ROUTE,

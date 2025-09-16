@@ -47,17 +47,17 @@ export function CreateRoomModal({
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Nome + Capacidade */}
           <div className="flex gap-4">
-            <div className="flex flex-col">
+            <div className="flex flex-col flex-1">
               <label className="text-sm font-medium mb-1">Nome da Sala</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange("name", e.target.value)}
-                className="border rounded-xl p-2 min-w-[250px] border-gray-300 text-sm text-gray-600"
+                className="border rounded-lg border-gray-300 p-2 w-full text-sm text-gray-600"
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col w-28">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
                 type="text"
@@ -68,7 +68,7 @@ export function CreateRoomModal({
                     handleChange("capacity", value === "" ? 0 : Number(value));
                   }
                 }}
-                className="border rounded-xl p-2 min-w-[60px] [appearance:textfield] border-gray-300 text-sm text-gray-600"
+                className="border rounded-lg border-gray-300 p-2 text-sm text-gray-600 [appearance:textfield]"
                 inputMode="numeric"
               />
             </div>
@@ -81,7 +81,7 @@ export function CreateRoomModal({
               type="text"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="w-full border rounded-xl p-2 border-gray-300 text-sm text-gray-600"
+              className="w-full border rounded-lg p-2 border-gray-300 text-sm text-gray-600"
             />
           </div>
 
@@ -91,29 +91,29 @@ export function CreateRoomModal({
             <textarea
               value={formData.description}
               onChange={(e) => handleChange("description", e.target.value)}
-              className="w-full border rounded-xl p-2 border-gray-300 text-sm text-gray-600 text-sm text-gray-600"
+              className="w-full h-20 border rounded-lg p-2 border-gray-300 text-sm text-gray-600 text-sm text-gray-600"
             />
           </div>
 
           {/* Status */}
-          <div>
+          <div className="relative">
             <label className="block text-sm font-medium mb-1">Status</label>
             <select
               value={formData.status}
               onChange={(e) => handleChange("status", e.target.value)}
-              className="border rounded-xl p-2 border-gray-300 text-gray-500 appearance-none pr-10 pl-3 text-sm text-gray-600"
+              className="w-32 h-10 border border-gray-300 text-sm rounded-lg p-2 text-gray-600 appearance-none pr-10 pl-3"
             >
               <option>Disponível</option>
               <option>Reservada</option>
               <option>Manutenção</option>
             </select>
             {/* Ícone da seta */}
-            <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-200 pointer-events-none" />
+            <FaChevronDown className="absolute left-25 top-9 text-gray-400 pointer-events-none" />
           </div>
 
           {/* Amenities */}
           <div>
-            <label className="block text-sm font-medium mb-2">Amenities</label>
+            <label className="block text-sm font-medium mb-2">Recursos</label>
             <div className="flex flex-wrap gap-2 mb-6">
               {Object.keys(amenityIcons).map((amenityKey) => {
                 const amenity = amenityKey as Amenity;

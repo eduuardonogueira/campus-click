@@ -88,13 +88,12 @@ export function RoomCards({ sala, userRole }: IRoomCardProps) {
           <div className="flex items-center justify-between gap-3">
             {/* Select customizado */}
             <div className="relative">
-              <select className="w-52 h-10 border border-gray-600 rounded-md text-sm text-gray-500">
+              <FaChevronDown className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
+              <select className="w-52 h-10 border border-gray-600 rounded-md text-sm text-gray-500 appearance-none pr-10 pl-3">
                 <option>Reservada</option>
                 <option>Disponível</option>
                 <option>Manutenção</option>
               </select>
-              {/* Ícone da seta */}
-              
             </div>
 
             {/* Botões de ação */}
