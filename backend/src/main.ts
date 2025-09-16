@@ -23,6 +23,7 @@ async function bootstrap() {
     .setTitle('Campus Click API')
     .setDescription('Documentação da API Campus Click')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

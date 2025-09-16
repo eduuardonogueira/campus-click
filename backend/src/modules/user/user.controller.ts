@@ -23,13 +23,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Cria um novo usuário' })
-  @ApiBody({ type: CreateUserDto })
-  @ApiResponse({ status: 201, description: 'Usuário criado com sucesso.' })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
 
   @Get()
   @ApiOperation({ summary: 'Lista todos os usuários' })
