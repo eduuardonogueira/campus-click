@@ -18,9 +18,7 @@ type ActionCardItem = {
   icon: IconType;
 };
 
-export async function useHomeData(): Promise<{
-  actionCardData: ActionCardItem[];
-}> {
+export async function useHomeData() {
   const user = await getProfile();
 
   const actionCardData: ActionCardItem[] = [

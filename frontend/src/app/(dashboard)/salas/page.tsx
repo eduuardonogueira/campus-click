@@ -1,12 +1,14 @@
 "use client";
 
-import { RoomCard } from "@/components/index";
-import { RoomCards } from "@/components/RoomCardAdmin";
+import {
+  RoomCard,
+  AdminRoomCard,
+  EmptyState,
+  CreateRoomModal,
+} from "@/components/index";
 import { FaSearch, FaFilter, FaChevronDown } from "react-icons/fa";
 import { mockRooms } from "./mock";
 import { ChangeEvent, useEffect, useState } from "react";
-import { EmptyState } from "@/components/EmptyState/EmptyState.salas.component";
-import { CreateRoomModal } from "@/components/CreateRoomModal";
 import { IUser } from "@/types/user";
 import { getProfile } from "@/api/index";
 import { EnumRoomStatus } from "@/types/room";
@@ -26,7 +28,7 @@ export default function SalasPage() {
     fetchUserProfile();
   }, []);
 
-  const filteredSalas = mockRooms.filter((room) =>
+  const filteredRooms = mockRooms.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -80,7 +82,7 @@ export default function SalasPage() {
         )}
       </div>
 
-      {filteredSalas.length === 0 ? (
+      {filteredRooms.length === 0 ? (
         <EmptyState
           title="Não há salas cadastradas no sistema"
           message="O administrador não adicionou salas para agendamento"
@@ -89,32 +91,48 @@ export default function SalasPage() {
         <>
           <div className="flex gap-2 mb-8">
             <button className="px-4 py-2 border border-green rounded-full bg-green-200 font-black text-green-900">
-              {mockRooms.filter((room) => room.status === EnumRoomStatus.AVAILABLE).length}{" "}
+              {
+                mockRooms.filter(
+                  (room) => room.status === EnumRoomStatus.AVAILABLE
+                ).length
+              }{" "}
               Disponível
             </button>
             <button className="px-4 py-2 border border-yellow rounded-full bg-yellow-200 font-black text-yellow-900">
-              {mockRooms.filter((room) => room.status === EnumRoomStatus.OCCUPIED).length}{" "}
+              {
+                mockRooms.filter(
+                  (room) => room.status === EnumRoomStatus.OCCUPIED
+                ).length
+              }{" "}
               Ocupadas
             </button>
             <button className="px-4 py-2 border border-red rounded-full bg-red-200 font-black text-red-900">
-              {mockRooms.filter((room) => room.status === EnumRoomStatus.MAINTENANCE).length}{" "}
+              {
+                mockRooms.filter(
+                  (room) => room.status === EnumRoomStatus.MAINTENANCE
+                ).length
+              }{" "}
               Manutenção
             </button>
           </div>
 
           <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
-            {filteredSalas.map((sala) =>
+            {filteredRooms.map((room) =>
               user?.role === "admin" ? (
-                <RoomCards key={sala.id} sala={sala} userRole="Admin" />
+                <AdminRoomCard key={room.id} room={room} />
               ) : (
-                <RoomCard key={sala.id} sala={sala} />
+                <RoomCard key={room.id} room={room} />
               )
             )}
           </div>
         </>
       )}
 
-      <CreateRoomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CreateRoomModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   );
 }
+
