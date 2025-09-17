@@ -1,6 +1,8 @@
-import { IsNotEmpty, IsNumber, IsPositive } from "class-validator";
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateRoomAmenityDto } from './create-room-amenity.dto';
+import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
-export class CreateRoomAmenityDto {
+export class UpdateRoomAmenityDto extends PartialType(CreateRoomAmenityDto) {
     @IsNotEmpty({ message: 'roomId should not be empty' })
     @IsNumber({}, { message: 'roomId must be a number' })
     @IsPositive({ message: 'roomId must be a number greater than 0' })
