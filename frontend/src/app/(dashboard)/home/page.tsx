@@ -4,7 +4,7 @@ import { useHomeData } from "@/hooks/useHomeData";
 import ActionCard from "./ActionCard";
 import StatsCard from "./StatsCard";
 import { statsMock } from "./mock";
-const userRole = "admin" // altere para ver o painel do admin
+const userRole = "user" // altere para ver o painel do admin
 
 export default async function HomePage() {
   const { actionCardData } = useHomeData(userRole);
