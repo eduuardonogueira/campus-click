@@ -7,8 +7,8 @@ import {
 import { FaSearch, FaCalendarCheck } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import type { IconType } from "react-icons";
-
-type UserRole = "user" | "admin";
+import { getProfile } from "@/api";
+import { EnumUserRole } from "@/types/user";
 
 type ActionCardItem = {
   title: string;
@@ -18,8 +18,10 @@ type ActionCardItem = {
   icon: IconType;
 };
 
-export function useHomeData(): { actionCardData: ActionCardItem[] } {
-  let userRole: UserRole = "user"; // trocar para "admin" para testar
+export async function useHomeData(): Promise<{
+  actionCardData: ActionCardItem[];
+}> {
+  const user = await getProfile();
 
   const actionCardData: ActionCardItem[] = [
     {
@@ -38,7 +40,7 @@ export function useHomeData(): { actionCardData: ActionCardItem[] } {
     },
   ];
 
-  if (userRole === "user") {
+  if (user?.role === EnumUserRole.ADMIN) {
     actionCardData.push({
       title: "Painel de Administração",
       text: "Gerencie salas e configurações do sistema",

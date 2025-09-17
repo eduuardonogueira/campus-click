@@ -36,7 +36,6 @@ export default function SalasPage() {
 
   return (
     <main className="max-w-[1200px] mx-auto p-8">
-      {/* Header */}
       <header className="mb-4">
         <div>
           <h1 className="text-4xl font-bold">
@@ -50,7 +49,6 @@ export default function SalasPage() {
         </div>
       </header>
 
-      {/* Barra de pesquisa e filtros */}
       <div className="flex gap-4 mb-4">
         <div className="relative flex items-center flex-grow">
           <FaSearch className="absolute left-4 text-gray-500" />
