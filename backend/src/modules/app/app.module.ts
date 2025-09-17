@@ -5,13 +5,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomModule } from '../room/room.module';
-import { UserModule } from '../user/user.module';
 import { Room } from '../room/entities/room.entity';
-import { Booking } from '../booking/entities/booking.entity';
 import { User } from '../user/entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 import configuration from '../../config/configuration';
 import { Amenity } from 'src/modules/amenities/entities/amenity.entity';
+import { UserModule } from '../user/user.module';
+import { AmenitiesModule } from '../amenities/amenities.module';
 
 const config = configuration();
 
@@ -24,15 +24,16 @@ const config = configuration();
       username: config.dbUser,
       password: config.dbPass,
       database: config.dbName,
-      entities: [Room, Booking, User, Amenity],
-      synchronize: true,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      entities: [Room, User, Amenity],
+      synchronize: true, // Ao invés usar migrations, pra prod usar migrations e setar como false
+      ssl: { rejectUnauthorized: false },
     }),
     RoomModule,
     UserModule,
     AuthModule,
+    RoomModule,
+    UserModule,
+    AmenitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

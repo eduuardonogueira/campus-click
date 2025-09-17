@@ -1,7 +1,14 @@
-
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsNumber,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsEnum,
+} from 'class-validator';
 import { Type } from 'class-transformer';
+import { Status } from '../enum/status.enum';
+import { Type as RoomType } from '../enum/type.enum'; // Renomeado para evitar conflito com 'Type' do class-transformer
 
 export class CreateRoomDto {
   @ApiProperty({ example: 'Sala 101' })
@@ -9,6 +16,10 @@ export class CreateRoomDto {
   roomName: string;
 
   @ApiProperty({ example: 30 })
+  @IsNotEmpty()
+  @IsNumber({ allowNaN: false }, { message: 'Duration must be a valid number' })
+  duration: number;
+
   @IsNotEmpty()
   @Type(() => Number)
   @IsNumber({ allowNaN: false }, { message: 'Capacity must be a valid number' })
@@ -20,7 +31,10 @@ export class CreateRoomDto {
 
   @ApiProperty({ example: 'disponivel' })
   @IsNotEmpty()
-  status: string; // por enquanto string depois mudo pra enum
+  @IsEnum(Status, {
+    message: 'Status must be one of: available, scheduled, maintenance',
+  })
+  status: Status;
 
   @ApiPropertyOptional({ example: 'Sala com projetor' })
   @IsOptional()
@@ -34,5 +48,6 @@ export class CreateRoomDto {
 
   @ApiProperty({ example: 'aula' })
   @IsNotEmpty()
-  type: string; // por enquanto string depois mudo pra enum
+  @IsEnum(RoomType, { message: 'Type must be one of: room, laboratory' })
+  type: RoomType;
 }
