@@ -4,10 +4,9 @@ import {
   FaChalkboardTeacher,
   FaWifi,
   FaVideo,
-  FaChevronDown,
 } from "react-icons/fa";
 import { useState } from "react";
-import { IRoom, Amenity } from "@/types/room";
+import { IRoom, Amenity, RoomStatus } from "@/types/room";
 
 const amenityIcons: Record<Amenity, React.ReactNode> = {
   Projetor: <FaTv />,
@@ -15,6 +14,8 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
   Wifi: <FaWifi />,
   "Vídeo Conferência": <FaVideo />,
 };
+
+const STATUS_OPTIONS: RoomStatus[] = ["Disponível", "Ocupado", "Manutenção"];
 
 export function EditRoomModal({
   sala,
@@ -29,20 +30,20 @@ export function EditRoomModal({
   const [location, setLocation] = useState(sala.location);
   const [capacity, setCapacity] = useState(sala.capacity);
   const [description, setDescription] = useState(sala.description);
-  const [status, setStatus] = useState(sala.status);
+  const [status, setStatus] = useState<RoomStatus>(sala.status);
   const [amenities, setAmenities] = useState<Amenity[]>(sala.amenities || []);
 
   if (!isOpen) return null;
 
   const toggleAmenity = (amenity: Amenity) => {
-    setAmenities(prev =>
-      prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
+    setAmenities((prev) =>
+      prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
     );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui você pode enviar os dados atualizados para o backend ou atualizar o estado pai
+    // enviar para o estado pai conforme nossa arquitetura
     console.log({ name, location, capacity, description, status, amenities });
     onClose();
   };
@@ -54,7 +55,7 @@ export function EditRoomModal({
         <p className="text-gray-400 mb-4">Atualize e configure as informações da sala</p>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Nome */}
+          {/* Nome + Capacidade */}
           <div className="flex gap-4">
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Nome da Sala</label>
@@ -66,7 +67,6 @@ export function EditRoomModal({
               />
             </div>
 
-            {/* Capacidade */}
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
@@ -105,7 +105,7 @@ export function EditRoomModal({
             />
           </div>
 
-          {/* Status */}
+          {/* Status (tipado) */}
           <div>
             <label className="block text-sm font-medium mb-1">Status</label>
             <select
@@ -113,9 +113,11 @@ export function EditRoomModal({
               onChange={e => setStatus(e.target.value)}
               className="min-w-[60px] h-10 border border-gray-300 text-sm rounded-xl border-gray-300 p-2 text-sm text-gray-600 appearance-none pr-10 pl-3"
             >
-              <option>Disponível</option>
-              <option>Reservada</option>
-              <option>Manutenção</option>
+              {STATUS_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
             </select>
             {/* Ícone da seta */}
             <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-200 pointer-events-none" />
@@ -153,7 +155,6 @@ export function EditRoomModal({
             </div>
           </div>
 
-
           {/* Botões */}
           <div className="flex justify-end gap-3 mt-4">
             <button
@@ -175,8 +176,17 @@ export function EditRoomModal({
     </div>
   );
 }
+
 // Modal de confirmação para exclusão
-export function DeleteRoomModal({ isOpen, onClose, onConfirm }: { isOpen: boolean; onClose: () => void; onConfirm: () => void }) {
+export function DeleteRoomModal({
+  isOpen,
+  onClose,
+  onConfirm,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
   if (!isOpen) return null;
 
   return (
@@ -189,13 +199,13 @@ export function DeleteRoomModal({ isOpen, onClose, onConfirm }: { isOpen: boolea
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-black"
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-black cursor-pointer"
           >
             Excluir
           </button>

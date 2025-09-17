@@ -4,18 +4,14 @@ import { HOME_ROUTE } from "@/constants/routes";
 import Link from "next/link";
 import { FaCalendarAlt, FaUserCircle } from "react-icons/fa";
 import { LogoutButton } from "./index";
+import { IUser } from "@/types/user";
+import { getProfile } from "@/api";
 
-interface INavbarProps {
-  userName?: string;
-  userRole?: string;
-}
+export async function Navbar() {
+  const user: IUser | null = await getProfile();
 
-export async function Navbar({
-  userName = "Aluno.teste@discente.ufra.edu.br",
-  userRole = "Aluno"
-}: INavbarProps) {
   return (
-    <header className="flex justify-around px-9 py-3 items-center border-b-gray-900 border-1">
+    <header className="flex justify-between px-9 py-3 items-center border-b-gray-900 border-1">
       <div className="flex items-center gap-2">
         <FaCalendarAlt className="text-2xl" />
         <Link href={HOME_ROUTE} className="text-2xl font-bold">
@@ -27,9 +23,9 @@ export async function Navbar({
         <div className="flex gap-2">
           <FaUserCircle className="text-5xl" />
           <div className="flex flex-col justify-center align-top">
-            <span className="">{userName}</span>
+            <span className="">{user?.fullName}</span>
             <span className="text-sm bg-black py-1 px-4 text-white w-min rounded-2xl">
-              {userRole}
+              {user?.role}
             </span>
           </div>
         </div>

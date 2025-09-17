@@ -7,7 +7,7 @@ import { statsMock } from "./mock";
 const userRole = "admin" // altere para ver o painel do admin
 
 export default async function HomePage() {
-  const { actionCardData } = useHomeData(userRole);
+  const { actionCardData } = useHomeData();
 
   return (
     <main className="flex flex-col items-center gap-10">
