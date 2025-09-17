@@ -13,6 +13,7 @@ import { Amenity } from 'src/modules/amenities/entities/amenity.entity';
 import { UserModule } from '../user/user.module';
 import { AmenitiesModule } from '../amenities/amenities.module';
 import { RoomAmenity } from '../room-amenities/entities/room-amenity.entity';
+import { RoomAmenitiesModule } from '../room-amenities/room-amenities.module';
 
 const config = configuration();
 
@@ -35,6 +36,7 @@ const config = configuration();
     RoomModule,
     UserModule,
     AmenitiesModule,
+    RoomAmenitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
