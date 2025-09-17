@@ -7,8 +7,9 @@ import {
   IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Status } from '../enum/status.enum';
-import { Type as RoomType } from '../enum/type.enum'; // Renomeado para evitar conflito com 'Type' do class-transformer
+import { EnumRoomStatus } from 'src/types/room';
+import { EnumRoomType } from 'src/types/room';
+
 
 export class CreateRoomDto {
   @ApiProperty({ example: 'Sala 101' })
@@ -31,10 +32,8 @@ export class CreateRoomDto {
 
   @ApiProperty({ example: 'disponivel' })
   @IsNotEmpty()
-  @IsEnum(Status, {
-    message: 'Status must be one of: available, scheduled, maintenance',
-  })
-  status: Status;
+  @IsEnum(EnumRoomStatus, { message: 'Status must be one of: available, scheduled, maintenance' })
+  status: EnumRoomStatus;
 
   @ApiPropertyOptional({ example: 'Sala com projetor' })
   @IsOptional()
@@ -48,6 +47,6 @@ export class CreateRoomDto {
 
   @ApiProperty({ example: 'aula' })
   @IsNotEmpty()
-  @IsEnum(RoomType, { message: 'Type must be one of: room, laboratory' })
-  type: RoomType;
+  @IsEnum(EnumRoomType, { message: 'Type must be one of: room, laboratory' })
+  type: EnumRoomType;
 }
