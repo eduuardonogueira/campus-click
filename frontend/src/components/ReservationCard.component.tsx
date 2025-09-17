@@ -1,16 +1,29 @@
-import { MapPin, Users, Calendar, Clock } from 'lucide-react';
-import { Reservation } from '@/types/reservation';
-import styles from './ReservationCard.module.css';
+import { MapPin, Users } from "lucide-react";
+import { BiTrash } from "react-icons/bi";
+import { Reservation } from "@/types/reservation";
+import styles from "./ReservationCard.module.css";
 
 interface ReservationCardProps {
   reservation: Reservation;
+  onDelete: (id: string) => void;
 }
 
-export function ReservationCard({ reservation }: ReservationCardProps) {
+export function ReservationCard({ reservation, onDelete }: ReservationCardProps) {
   return (
     <div className={styles.card}>
-      <h2 className={styles.title}>{reservation.titulo}</h2>
-      
+      {/* Cabeçalho */}
+      <div className="flex justify-between items-center">
+        <h2 className={styles.title}>{reservation.titulo}</h2>
+        <button
+          onClick={() => onDelete(reservation.id)}
+          className="flex items-center border border-gray-600 rounded-lg px-3 py-2 cursor-pointer text-sm text-gray-600 hover:bg-gray-200"
+        >
+          <BiTrash className="mr-1 w-4 h-4 text-gray-500" />
+          Cancelar
+        </button>
+      </div>
+
+      {/* Local e Capacidade */}
       <div className={styles.metaInfoRow}>
         <span className={styles.infoItem}>
           <MapPin size={16} />
@@ -22,16 +35,13 @@ export function ReservationCard({ reservation }: ReservationCardProps) {
         </span>
       </div>
 
-      {/* Linha de Meta-informações 2 */}
+      {/* Data e Horário */}
       <div className={styles.metaInfoRow}>
-         <span className={styles.infoItem}>
-            {reservation.data}
-        </span>
-         <span className={styles.infoItem}>
-            {reservation.horario}
-        </span>
+        <span className={styles.infoItem}>{reservation.data}</span>
+        <span className={styles.infoItem}>{reservation.horario}</span>
       </div>
 
+      {/* Propósito */}
       <p className={styles.purpose}>
         <strong>Propósito:</strong> {reservation.proposito}
       </p>

@@ -1,8 +1,8 @@
 .card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: hsl(0, 0%, 100%);
+  border: 1px solid #626262;
   border-radius: 8px;
-  padding: 24px;
+  padding: 16px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   cursor: pointer; 
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -38,7 +38,7 @@
 
 .purpose {
   font-size: 0.875rem; 
-  color: #374151;
+  color: #000000;
   margin: 16px 0 0 0;
 }
 

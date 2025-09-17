@@ -27,7 +27,8 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
   "Vídeo Conferência": <FaVideo />,
 };
 
-export function RoomCards({ sala, userRole }: IRoomCardProps) {
+export function RoomCards({ sala, userRole }: 
+  IRoomCardProps) {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
 
