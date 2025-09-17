@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import "./global.css"
 import { Roboto } from 'next/font/google';
 
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={roboto.className}>
+        <ToastContainer />
         {children}
       </body>
     </html>
