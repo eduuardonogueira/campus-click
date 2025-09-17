@@ -19,7 +19,18 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  logger.log('Backend is alive on: ', await app.getUrl());
+  const url = await app.getUrl();
+  logger.log('Backend is alive on: ' + url);
+
+    // faz uma requisição para si mesmo a cada 3 minutos
+    setInterval(async () => {
+      try {
+        const res = await fetch(url);
+        logger.log('Keep-alive ping sent to ' + url + ' - status: ' + res.status);
+      } catch (err) {
+        logger.warn('Keep-alive ping failed: ' + err?.message);
+      }
+    }, 3 * 60 * 1000); // 3 minutos (180000 ms) tá em milisegundos
 }
 
 void bootstrap();
