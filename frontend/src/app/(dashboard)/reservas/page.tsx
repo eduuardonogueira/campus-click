@@ -15,11 +15,11 @@ export default function MyReservationsPage() {
   const [reservations, setReservations] = useState<Reservation[]>(mockReservations);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
 
-  const handleRequestDelete = (id: string) => {
+  const handleRequestDelete = (id: number) => {
     const reservation = reservations.find((r) => r.id === id) || null;
     setSelectedReservation(reservation);
   };
-
+  
   const handleConfirmDelete = () => {
     if (selectedReservation) {
       setReservations((prev) => prev.filter((r) => r.id !== selectedReservation.id));

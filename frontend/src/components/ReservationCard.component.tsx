@@ -5,7 +5,7 @@ import styles from "./ReservationCard.module.css";
 
 interface ReservationCardProps {
   reservation: Reservation;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 export function ReservationCard({ reservation, onDelete }: ReservationCardProps) {
