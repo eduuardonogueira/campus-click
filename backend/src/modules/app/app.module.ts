@@ -12,6 +12,8 @@ import configuration from '../../config/configuration';
 import { Amenity } from 'src/modules/amenities/entities/amenity.entity';
 import { UserModule } from '../user/user.module';
 import { AmenitiesModule } from '../amenities/amenities.module';
+import { RoomAmenity } from '../room-amenities/entities/room-amenity.entity';
+import { RoomAmenitiesModule } from '../room-amenities/room-amenities.module';
 
 const config = configuration();
 
@@ -24,8 +26,8 @@ const config = configuration();
       username: config.dbUser,
       password: config.dbPass,
       database: config.dbName,
-      entities: [Room, User, Amenity],
-      synchronize: true, // Ao invés usar migrations, pra prod usar migrations e setar como false
+      entities: [Room, User, Amenity, RoomAmenity],
+      synchronize: true, // Ao invés de usar migrations use synchronize, pra prod usar migrations e setar como false
       ssl: { rejectUnauthorized: false },
     }),
     RoomModule,
@@ -34,6 +36,7 @@ const config = configuration();
     RoomModule,
     UserModule,
     AmenitiesModule,
+    RoomAmenitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
