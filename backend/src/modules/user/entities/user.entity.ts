@@ -1,3 +1,4 @@
+import { EnumUserRole, EnumUserType } from 'src/types/user';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('User')
@@ -6,7 +7,7 @@ export class User {
   id: number;
 
   @Column()
-  name: string;
+  fullName: string;
 
   @Column({ unique: true })
   email: string;
@@ -14,9 +15,15 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: EnumUserType, default: EnumUserType.EXTERNO })
+  type: EnumUserType;
+
+  @Column({ type: 'enum', enum: EnumUserRole, default: EnumUserRole.USER })
+  role: EnumUserRole;
+
+  @Column({ type: 'timestamptz' })
   createdAt: Date;
 
-  @Column()
-  updatedAt: Date;
+  @Column({ type: 'timestamptz', nullable: true })
+  updatedAt: Date | null;
 }
