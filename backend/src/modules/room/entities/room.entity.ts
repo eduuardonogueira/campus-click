@@ -1,4 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { EnumRoomType } from 'src/types/room';
+import { EnumRoomStatus } from 'src/types/room';
 
 @Entity('Room')
 export class Room {
@@ -9,13 +11,16 @@ export class Room {
   roomName: string;
 
   @Column()
+  duration: number;
+
+  @Column()
   capacity: number;
 
   @Column()
   location: string;
 
-  @Column()
-  status: string; // por enquanto string depois mudo pra enum
+  @Column({ type: 'enum', enum: EnumRoomStatus, default: EnumRoomStatus.AVAILABLE })
+  status: EnumRoomStatus;
 
   @Column({ type: 'text', nullable: true })
   description: string | null;
@@ -29,6 +34,6 @@ export class Room {
   @Column({ type: 'timestamp', nullable: true })
   updatedAt: Date | null;
 
-  @Column()
-  type: string; // por enquanto string depois mudo pra enum
+  @Column({ type: 'enum', enum: EnumRoomType, default: EnumRoomType.ROOM })
+  type: EnumRoomType;
 }

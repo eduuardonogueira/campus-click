@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import configuration from './config/configuration';
 import { Logger } from '@nestjs/common';
 
@@ -17,8 +18,17 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(port);
+  // Swagger config
+  const config = new DocumentBuilder()
+    .setTitle('Campus Click API')
+    .setDescription('Documentação da API Campus Click')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
+  await app.listen(port);
   logger.log('Backend is alive on: ', await app.getUrl());
 }
 

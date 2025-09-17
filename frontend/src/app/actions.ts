@@ -4,6 +4,7 @@ import { AUTH_COOKIE_KEY } from "@/constants/cookies";
 import { LOGIN_ROUTE } from "@/constants/routes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { login as apiLogin } from "@/api/index";
 
 export async function logout() {
   const cookieStore = await cookies();
@@ -15,18 +16,8 @@ export async function login(
   username: string,
   password: string
 ): Promise<boolean> {
-  if (username === "admin@admin" && password === "admin") {
-    const cookieStore = await cookies();
-    cookieStore.set(AUTH_COOKIE_KEY, "admin");
-    return true;
-  }
-
-  if (username === "user@user" && password === "user") {
-    const cookieStore = await cookies();
-    cookieStore.set(AUTH_COOKIE_KEY, "user");
-    return true;
-  }
-
-  return false;
+  const response = await apiLogin(username, password);
+  console.log(response);
+  return response;
 }
 

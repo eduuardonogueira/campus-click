@@ -1,14 +1,20 @@
 "use client";
 
-import { RoomCard } from "@/components/index";
-import { RoomCards } from "@/components/RoomCardAdmin";
-import { FaSearch, FaFilter } from "react-icons/fa";
+import {
+  RoomCard,
+  AdminRoomCard,
+  EmptyState,
+  CreateRoomModal,
+} from "@/components/index";
+import { FaSearch, FaFilter, FaChevronDown } from "react-icons/fa";
 import { mockRooms } from "./mock";
 import { ChangeEvent, useEffect, useState } from "react";
 import { IUser } from "@/types/user";
 import { getProfile } from "@/api/index";
+import { EnumRoomStatus } from "@/types/room";
 
 export default function SalasPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<IUser | undefined>();
 
@@ -22,7 +28,7 @@ export default function SalasPage() {
     fetchUserProfile();
   }, []);
 
-  const filteredSalas = mockRooms.filter((room) =>
+  const filteredRooms = mockRooms.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -32,7 +38,7 @@ export default function SalasPage() {
 
   return (
     <main className="max-w-[1200px] mx-auto p-8">
-      <header className="mb-8">
+      <header className="mb-4">
         <div>
           <h1 className="text-4xl font-bold">
             {user?.role === "admin" ? "Painel do Administrador" : "Salas"}
@@ -51,43 +57,81 @@ export default function SalasPage() {
           <input
             type="text"
             placeholder="Encontre e reserve salas ou laboratórios"
-            className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-600 bg-gray-50 text-base text-gray-900 placeholder-gray-500"
+            className="w-full pl-10 pr-4 h-10 rounded-lg border border-gray-600 bg-gray-50 text-base text-gray-900 placeholder-gray-500"
             onChange={handleSearchChange}
           />
         </div>
 
         <div className="relative flex items-center">
           <FaFilter className="absolute left-4 text-gray-500" />
-          <select className="min-w-[150px] pl-10 pr-4 py-3 rounded-lg border border-gray-600 bg-gray-50 text-base text-gray-900">
+          <select className="min-w-[220px] pl-10 pr-4 h-10 rounded-lg border border-gray-600 bg-gray-50 text-base text-gray-900 appearance-none">
             <option>Filtros</option>
           </select>
+          <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
         </div>
-      </div>
 
-      <div className="flex gap-2 mb-8">
-        <button className="px-4 py-2 rounded-full bg-green-300 font-medium text-green-900">
-          {mockRooms.filter((room) => room.status === "Disponível").length}{" "}
-          Disponível
-        </button>
-        <button className="px-4 py-2 rounded-full bg-yellow-300 font-medium text-yellow-900">
-          {mockRooms.filter((room) => room.status === "Ocupado").length}{" "}
-          Ocupadas
-        </button>
-        <button className="px-4 py-2 rounded-full bg-red-300  font-medium text-gray-900">
-          {mockRooms.filter((room) => room.status === "Manutenção").length}{" "}
-          Manutenção
-        </button>
-      </div>
-
-      <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
-        {filteredSalas.map((sala) =>
-          user?.role === "admin" ? (
-            <RoomCards key={sala.id} sala={sala} userRole="Admin" />
-          ) : (
-            <RoomCard key={sala.id} sala={sala} />
-          )
+        {user?.role === "admin" && (
+          <div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="h-10 bg-black text-white rounded-lg min-w-[120px] cursor-pointer hover:opacity-80"
+            >
+              Criar Sala
+            </button>
+          </div>
         )}
       </div>
+
+      {filteredRooms.length === 0 ? (
+        <EmptyState
+          title="Não há salas cadastradas no sistema"
+          message="O administrador não adicionou salas para agendamento"
+        />
+      ) : (
+        <>
+          <div className="flex gap-2 mb-8">
+            <button className="px-4 py-2 border border-green rounded-full bg-green-200 font-black text-green-900">
+              {
+                mockRooms.filter(
+                  (room) => room.status === EnumRoomStatus.AVAILABLE
+                ).length
+              }{" "}
+              Disponível
+            </button>
+            <button className="px-4 py-2 border border-yellow rounded-full bg-yellow-200 font-black text-yellow-900">
+              {
+                mockRooms.filter(
+                  (room) => room.status === EnumRoomStatus.OCCUPIED
+                ).length
+              }{" "}
+              Ocupadas
+            </button>
+            <button className="px-4 py-2 border border-red rounded-full bg-red-200 font-black text-red-900">
+              {
+                mockRooms.filter(
+                  (room) => room.status === EnumRoomStatus.MAINTENANCE
+                ).length
+              }{" "}
+              Manutenção
+            </button>
+          </div>
+
+          <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
+            {filteredRooms.map((room) =>
+              user?.role === "admin" ? (
+                <AdminRoomCard key={room.id} room={room} />
+              ) : (
+                <RoomCard key={room.id} room={room} />
+              )
+            )}
+          </div>
+        </>
+      )}
+
+      <CreateRoomModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   );
 }

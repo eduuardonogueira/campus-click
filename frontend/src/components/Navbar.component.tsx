@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HOME_ROUTE } from "@/constants/routes";
-import { FaCalendarAlt, FaUserCircle, FaCog } from "react-icons/fa";
+import { FaCalendarAlt, FaUserCircle } from "react-icons/fa";
 import { LogoutButton } from "./index";
 import { IUser } from "@/types/user";
 import { getProfile } from "@/api";
@@ -44,10 +44,7 @@ export function Navbar() {
           </div>
         </div>
 
-        <nav className="flex gap-8 text-gray-800">
-          <button className="hover:cursor-pointer" aria-label="Configurações">
-            <FaCog />
-          </button>
+        <nav className="flex gap-8 text-gray-400">
           <LogoutButton />
         </nav>
       </div>

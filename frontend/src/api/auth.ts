@@ -1,6 +1,6 @@
 "use server";
 
-import { IUser } from "@/types/user";
+import { ICreateUser, IUser } from "@/types/user";
 import { cookies } from "next/headers";
 import { authFetch } from "./authFetch.ts";
 import { AUTH_COOKIE_KEY } from "@/constants/cookies.ts";
@@ -17,20 +17,35 @@ export async function login(
       body: JSON.stringify({ email: username, password }),
     });
 
-    if (!response || response.status === 403) return false;
+    if (!response || response.status === 401) return false;
 
     const data = await response.json();
-    const { token } = data;
+    const { access_token } = data;
 
-    if (token) {
+    if (access_token) {
       const cookieStore = await cookies();
-      cookieStore.set("authToken", token);
+      cookieStore.set(AUTH_COOKIE_KEY, access_token);
       return true;
     }
   } catch (error) {
     console.log(error);
   }
   return false;
+}
+
+export async function signup(userData: ICreateUser): Promise<IUser | null> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...userData, role: "user" }),
+    });
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
 }
 
 export async function validate(): Promise<boolean> {
@@ -42,7 +57,7 @@ export async function validate(): Promise<boolean> {
       }
     );
 
-    if (!response || response.status === 403) return false;
+    if (!response || response.status === 401) return false;
 
     return response.json();
   } catch (error) {
@@ -52,31 +67,21 @@ export async function validate(): Promise<boolean> {
 }
 
 export async function getProfile(): Promise<IUser | null> {
-  // try {
-  //   const response = await authFetch(
-  //     `${process.env.BACKEND_URL}/auth/profile`,
-  //     {
-  //       method: "GET",
-  //     }
-  //   );
+  try {
+    const response = await authFetch(
+      `${process.env.BACKEND_URL}/auth/profile`,
+      {
+        method: "GET",
+      }
+    );
 
-  //   if (!response || response.status === 403) return null;
+    if (!response || response.status === 401) return null;
 
-  //   return response.json();
-  // } catch (error) {
-  //   console.log(error);
-  //   return null;
-  // }
-
-  const { defaultUser, adminUser } = useUser();
-  const cookieStore = await cookies();
-
-  const userRole = cookieStore.get(AUTH_COOKIE_KEY)?.value || "user";
-
-  if (userRole === "user") {
-    return defaultUser;
-  } else {
-    return adminUser;
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }
 

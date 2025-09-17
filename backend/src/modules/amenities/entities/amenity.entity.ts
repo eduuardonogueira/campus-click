@@ -5,18 +5,6 @@ export class Amenity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', unique: true, nullable: false })
   name: string;
-
-  @Column()
-  description: string;
-
-  @Column()
-  icon: string;
-
-  @Column()
-  createdAt: Date;
-
-  @Column()
-  updatedAt: Date;
 }

@@ -1,12 +1,17 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateRoomDto } from './create-room.dto';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
+import { EnumRoomStatus, EnumRoomType } from 'src/types/room';
 
 export class UpdateRoomDto extends PartialType(CreateRoomDto) {
   @IsOptional()
   @IsString()
   roomName: string;
+
+  @IsOptional()
+  @IsNumber({ allowNaN: false }, { message: 'Duration must be a valid number' })
+  duration: number;
 
   @IsOptional()
   @Type(() => Number)
@@ -18,8 +23,8 @@ export class UpdateRoomDto extends PartialType(CreateRoomDto) {
   location: string;
 
   @IsOptional()
-  @IsString()
-  status: string;
+  @IsEnum(EnumRoomStatus, { message: 'Status must be one of: available, scheduled, maintenance' })
+  status: EnumRoomStatus;
 
   @IsOptional()
   @IsString()
@@ -30,6 +35,6 @@ export class UpdateRoomDto extends PartialType(CreateRoomDto) {
   imageUrl: string | null;
 
   @IsOptional()
-  @IsString()
-  type: string;
+  @IsEnum(EnumRoomType, { message: 'Type must be one of: room, laboratory' })
+  type: EnumRoomType;
 }
