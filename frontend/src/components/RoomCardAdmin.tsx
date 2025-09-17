@@ -9,10 +9,9 @@ import {
   FaChalkboardTeacher,
   FaWifi,
   FaVideo,
-  FaEdit,
-  FaTrash,
   FaChevronDown,
 } from "react-icons/fa";
+import { BiAlarm, BiEdit, BiTrash } from "react-icons/bi";
 import { Amenity, IRoom } from "@/types/room";
 import { EditRoomModal, DeleteRoomModal } from "@/components/EditRoomModal.component";
 
@@ -89,7 +88,7 @@ export function RoomCards({ sala, userRole }: IRoomCardProps) {
             {/* Select customizado */}
             <div className="relative">
               <FaChevronDown className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
-              <select className="w-52 h-10 border border-gray-600 rounded-md text-sm text-gray-500 appearance-none pr-10 pl-3">
+              <select className="w-[170px] h-10 border border-gray-600 rounded-md text-sm text-gray-500 appearance-none pr-10 pl-3">
                 <option>Reservada</option>
                 <option>Disponível</option>
                 <option>Manutenção</option>
@@ -98,17 +97,20 @@ export function RoomCards({ sala, userRole }: IRoomCardProps) {
 
             {/* Botões de ação */}
             <div className="flex gap-3">
+              <button className="p-2 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200">
+                <BiAlarm className="text-gray-500 w-5 h-5" />
+              </button>
               <button
                 onClick={() => setEditOpen(true)}
-                className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
+                className="p-2 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
               >
-                <FaEdit className="text-gray-500" />
+                <BiEdit className="text-gray-500 w-5 h-5" />
               </button>
               <button
                 onClick={() => setDeleteOpen(true)}
-                className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
+                className="p-2 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
               >
-                <FaTrash className="text-gray-500" />
+                <BiTrash className="text-gray-500 w-5 h-5" />
               </button>
             </div>
           </div>
