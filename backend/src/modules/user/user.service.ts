@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+// ...existing code...
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,10 +12,9 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    let user = this.userRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const user = this.userRepository.create(createUserDto as Partial<User>);
     user.createdAt = new Date();
-    user.updatedAt = new Date();
     return this.userRepository.save(user);
   }
 
@@ -26,11 +26,28 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id, updateUserDto);
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.preload({
+      id,
+      ...updateUserDto,
+      updatedAt: new Date(),
+    });
+
+    if (!user) {
+      throw new HttpException(
+        `User with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return this.userRepository.save(user);
   }
 
   remove(id: number) {
     return this.userRepository.delete(id);
+  }
+
+  async findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
   }
 }

@@ -6,7 +6,7 @@ import StatsCard from "./StatsCard";
 import { statsMock } from "./mock";
 
 export default async function HomePage() {
-  const { actionCardData } = useHomeData();
+  const { actionCardData } = await useHomeData();
 
   return (
     <main className="flex flex-col items-center gap-10">

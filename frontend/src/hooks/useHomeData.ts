@@ -7,8 +7,8 @@ import {
 import { FaSearch, FaCalendarCheck } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import type { IconType } from "react-icons";
-
-type UserRole = "user" | "admin";
+import { getProfile } from "@/api";
+import { EnumUserRole } from "@/types/user";
 
 type ActionCardItem = {
   title: string;
@@ -18,13 +18,13 @@ type ActionCardItem = {
   icon: IconType;
 };
 
-export function useHomeData(): { actionCardData: ActionCardItem[] } {
-  let userRole: UserRole = "user"; // trocar para "admin" para testar
+export async function useHomeData() {
+  const user = await getProfile();
 
   const actionCardData: ActionCardItem[] = [
     {
       title: "Reserva de Salas",
-      text: "Encontre e reserve salas ou laboratórios do pavilhão",
+      text: "Encontre e reserve salas ou laboratórios",
       buttonText: "Procurar salas disponíveis",
       link: ROOMS_ROUTE,
       icon: FaSearch,
@@ -38,10 +38,10 @@ export function useHomeData(): { actionCardData: ActionCardItem[] } {
     },
   ];
 
-  if (userRole === "user") {
+  if (user?.role === EnumUserRole.ADMIN) {
     actionCardData.push({
       title: "Painel de Administração",
-      text: "Gerencie salas, usuários e configurações do sistema",
+      text: "Gerencie salas e configurações do sistema",
       buttonText: "Gerenciar sistema",
       link: ADMIN_ROUTE,
       icon: FaGear,
@@ -50,3 +50,4 @@ export function useHomeData(): { actionCardData: ActionCardItem[] } {
 
   return { actionCardData };
 }
+

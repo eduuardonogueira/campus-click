@@ -1,12 +1,22 @@
-import { IsNumber, IsNotEmpty, IsOptional, IsString, IsEnum } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsNumber,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsEnum,
+} from 'class-validator';
 import { Type } from 'class-transformer';
-import { Status } from '../enum/status.enum';
-import { Type as RoomType } from '../enum/type.enum'; // Renomeado para evitar conflito com 'Type' do class-transformer
+import { EnumRoomStatus } from 'src/types/room';
+import { EnumRoomType } from 'src/types/room';
+
 
 export class CreateRoomDto {
+  @ApiProperty({ example: 'Sala 101' })
   @IsNotEmpty()
   roomName: string;
 
+  @ApiProperty({ example: 30 })
   @IsNotEmpty()
   @IsNumber({ allowNaN: false }, { message: 'Duration must be a valid number' })
   duration: number;
@@ -16,22 +26,27 @@ export class CreateRoomDto {
   @IsNumber({ allowNaN: false }, { message: 'Capacity must be a valid number' })
   capacity: number;
 
+  @ApiProperty({ example: 'Bloco A' })
   @IsNotEmpty()
   location: string;
 
+  @ApiProperty({ example: 'disponivel' })
   @IsNotEmpty()
-  @IsEnum(Status, { message: 'Status must be one of: available, scheduled, maintenance' })
-  status: Status;
+  @IsEnum(EnumRoomStatus, { message: 'Status must be one of: available, scheduled, maintenance' })
+  status: EnumRoomStatus;
 
+  @ApiPropertyOptional({ example: 'Sala com projetor' })
   @IsOptional()
   @IsString()
   description: string | null;
 
+  @ApiPropertyOptional({ example: 'https://imagem.com/sala.jpg' })
   @IsOptional()
   @IsString()
   imageUrl: string | null;
 
+  @ApiProperty({ example: 'aula' })
   @IsNotEmpty()
-  @IsEnum(RoomType, { message: 'Type must be one of: room, laboratory' })
-  type: RoomType;
+  @IsEnum(EnumRoomType, { message: 'Type must be one of: room, laboratory' })
+  type: EnumRoomType;
 }
