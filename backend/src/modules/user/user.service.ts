@@ -12,8 +12,8 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    let user = this.userRepository.create(createUserDto as Partial<User>);
+  async create(createUserDto: CreateUserDto) {
+    const user = this.userRepository.create(createUserDto as Partial<User>);
     user.createdAt = new Date();
     user.updatedAt = new Date();
     return this.userRepository.save(user);

@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -10,25 +11,31 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string) {
-    const user = await this.userService.findByEmail(email);
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      // Não retornar senha
-      const { password, ...result } = user;
-      return result;
+  async validateUser(email: string, password: string) {
+    const foundUser = await this.userService.findByEmail(email.toLowerCase());
+
+    if (!foundUser)
+      throw new HttpException('Credenciais inválidas', HttpStatus.UNAUTHORIZED);
+
+    const isMatch = await bcrypt.compare(password, foundUser.password);
+
+    if (isMatch) {
+      return foundUser;
     }
+
     return null;
   }
 
-  login(user: any) {
-    const payload = { sub: user.id, email: user.email, role: user.role };
+  login(user: User) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { createdAt, updatedAt, password, ...userPayload } = user;
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(userPayload),
     };
   }
 
-  async signup(data: any) {
-    const hash = await bcrypt.hash(data.password, 10);
-    return this.userService.create({ ...data, password: hash });
+  async signup(userPayload: any) {
+    const hash = await bcrypt.hash(userPayload.password, 10);
+    return this.userService.create({ ...userPayload, password: hash });
   }
 }

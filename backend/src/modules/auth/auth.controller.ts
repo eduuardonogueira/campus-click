@@ -1,10 +1,21 @@
-import { Controller, Post, Body, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Request,
+  UseGuards,
+  Get,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ApiBody, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
 import { UserService } from '../user/user.service';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from '../user/dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,12 +28,13 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@Body() body: LoginDto) {
     const user = await this.authService.validateUser(body.email, body.password);
-    if (!user) {
-      return { error: 'Credenciais inválidas' };
-    }
+    if (!user)
+      throw new HttpException('Credenciais inválidas', HttpStatus.UNAUTHORIZED);
+
     return this.authService.login(user);
   }
 
+  @Serialize(UserDto)
   @Post('signup')
   @ApiBody({ type: SignupDto })
   @ApiResponse({
@@ -33,18 +45,15 @@ export class AuthController {
     return this.authService.signup(body);
   }
 
-  @Post('profile')
+  @Serialize(UserDto)
+  @Get('profile')
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'Usuário autenticado retornado com sucesso.',
   })
   @UseGuards(JwtAuthGuard)
-  async me(@Request() req, @Body() body?: any) {
-    const user = await this.userService.findByEmail(req.user.email);
-    return {
-      ...req.user,
-      name: user?.name,
-    };
+  getProfile(@Request() req) {
+    return this.userService.findByEmail(req.user.email);
   }
 }

@@ -17,12 +17,24 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dto/user.dto';
 
 @ApiTags('user')
+@Serialize(UserDto)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Post()
+  @ApiOperation({ summary: 'Cria um usuário' })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário criado com sucesso.',
+  })
+  create(@Body() userPayload: CreateUserDto) {
+    return this.userService.create(userPayload);
+  }
 
   @Get()
   @ApiOperation({ summary: 'Lista todos os usuários' })

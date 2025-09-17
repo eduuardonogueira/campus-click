@@ -6,13 +6,15 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET || 'defaultSecret',
     });
   }
 
-  async validate(payload: any) {
+  validate(payload: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
 }
