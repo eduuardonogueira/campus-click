@@ -1,13 +1,15 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '.env' });
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomModule } from '../room/room.module';
+import { UserModule } from '../user/user.module';
 import { Room } from '../room/entities/room.entity';
 import { Booking } from '../booking/entities/booking.entity';
 import { User } from '../user/entities/user.entity';
+import { AuthModule } from '../auth/auth.module';
 import configuration from '../../config/configuration';
 import { Amenity } from 'src/modules/amenities/entities/amenity.entity';
 
@@ -29,6 +31,8 @@ const config = configuration();
       },
     }),
     RoomModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

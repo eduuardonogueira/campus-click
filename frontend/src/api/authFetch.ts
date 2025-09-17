@@ -1,4 +1,5 @@
 "use server";
+import { AUTH_COOKIE_KEY } from "@/constants/cookies";
 import { cookies } from "next/headers";
 
 export async function authFetch(
@@ -6,7 +7,7 @@ export async function authFetch(
   options: RequestInit = {}
 ) {
   const cookieStore = await cookies();
-  const authToken = cookieStore.get("authToken")?.value;
+  const authToken = cookieStore.get(AUTH_COOKIE_KEY)?.value;
 
   const originalHeaders =
     options.headers instanceof Headers
@@ -25,3 +26,4 @@ export async function authFetch(
 
   return fetch(url, fetchOptions);
 }
+

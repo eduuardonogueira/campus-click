@@ -10,3 +10,10 @@ export interface IUser {
   createdAt: Date;
   updatedAt?: Date;
 }
+
+export interface ICreateUser {
+  fullName: string;
+  email: string;
+  type: UserType;
+}
+
