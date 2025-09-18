@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -18,11 +19,8 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { UserDto } from './dto/user.dto';
 
 @ApiTags('user')
-@Serialize(UserDto)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -43,8 +41,11 @@ export class UserController {
     status: 200,
     description: 'Lista de usuários retornada com sucesso.',
   })
-  findAll() {
-    return this.userService.findAll();
+  async findAll(@Query('page') page?: number, @Query('size') size?: number) {
+    let pageNumber = page ? Number(page) : 1;
+    if (pageNumber < 1) pageNumber = 1;
+    const sizeNumber = size ? Number(size) : 10;
+    return await this.userService.findAll(pageNumber, sizeNumber);
   }
 
   @Get(':id')
@@ -66,6 +67,17 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(id, updateUserDto);
+  }
+
+  @Get(':id/details')
+  @ApiOperation({ summary: 'Retorna detalhes do usuário e seus agendamentos' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Detalhes do usuário retornados com sucesso.',
+  })
+  async getUserDetails(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.getUserDetails(id);
   }
 
   @Delete(':id')

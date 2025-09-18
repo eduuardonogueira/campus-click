@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import { AvailabilityModal } from "@/components";
+import Link from "next/link";
 
 type Room = {
   name: string;

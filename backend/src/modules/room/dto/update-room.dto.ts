@@ -23,7 +23,9 @@ export class UpdateRoomDto extends PartialType(CreateRoomDto) {
   location: string;
 
   @IsOptional()
-  @IsEnum(EnumRoomStatus, { message: 'Status must be one of: available, scheduled, maintenance' })
+  @IsEnum(EnumRoomStatus, {
+    message: 'Status must be one of: available, scheduled, maintenance',
+  })
   status: EnumRoomStatus;
 
   @IsOptional()
