@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Room } from './entities/room.entity';
 import { Repository } from 'typeorm';
 import { RoomAmenitiesService } from '../room-amenities/room-amenities.service';
+import { AvailabilityService } from '../availability/availability.service';
+import { AppointmentService } from '../appointments/appointment.service';
 
 @Injectable()
 export class RoomService {
@@ -12,7 +14,21 @@ export class RoomService {
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
     private roomAmenitiesService: RoomAmenitiesService,
+    private readonly availabilityService: AvailabilityService,
+    private readonly appointmentService: AppointmentService,
   ) {}
+  async getRoomDetails(id: number) {
+    const room = await this.findOne(id);
+    const availability = await this.availabilityService.findAll();
+    const appointments = await this.appointmentService.findAll();
+    const roomAvailability = availability.filter((a) => a.room.id === id);
+    const roomAppointments = appointments.filter((ap) => ap.room.id === id);
+    return {
+      room,
+      availability: roomAvailability,
+      appointments: roomAppointments,
+    };
+  }
 
   async findAll() {
     const findedRooms = await this.roomRepository.find({
