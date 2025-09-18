@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseIntPipe,
@@ -17,7 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
+// import { UpdateRoomDto } from './dto/update-room.dto';
 
 @ApiTags('room')
 @Controller('room')
@@ -51,16 +50,17 @@ export class RoomController {
     return this.roomService.findOne(id);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Atualiza uma sala pelo ID' })
+  @Get(':id/details')
+  @ApiOperation({
+    summary: 'Retorna detalhes da sala, disponibilidade e agendamentos',
+  })
   @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: UpdateRoomDto })
-  @ApiResponse({ status: 200, description: 'Sala atualizada com sucesso.' })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateRoomDto: UpdateRoomDto,
-  ) {
-    return this.roomService.update(id, updateRoomDto);
+  @ApiResponse({
+    status: 200,
+    description: 'Detalhes da sala retornados com sucesso.',
+  })
+  async getRoomDetails(@Param('id', ParseIntPipe) id: number) {
+    return await this.roomService.getRoomDetails(id);
   }
 
   @Delete(':id')
