@@ -7,6 +7,7 @@ export default () => ({
   dbName: process.env.DB_NAME,
   dbUser: process.env.DB_USER,
   dbPass: process.env.DB_PASS,
+  backendUrl: process.env.BACKEND_URL,
 });
 
 export interface ValidationPipeOptions extends ValidatorOptions {
