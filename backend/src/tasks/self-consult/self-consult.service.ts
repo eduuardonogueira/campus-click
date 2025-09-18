@@ -11,8 +11,8 @@ export class SelfConsultService {
   async keepAlivePing() {
     try {
       const config = configuration();
-      
-      const url = `${config.backendUrl || 'http://localhost:' + config.port}/`; // Usa a variável BACKEND_URL ou localhost como fallback
+
+      const url = config.backendUrl;
       const res = await fetch(url); // O endpoint raiz (/) retorna 200 se o backend estiver vivo
       this.logger.log(`Keep-alive ping sent to ${url} - status: ${res.status}`);
     } catch (err) {
