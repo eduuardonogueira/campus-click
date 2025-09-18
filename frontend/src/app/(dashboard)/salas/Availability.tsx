@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import Link from "next/link";
-import AvailabilityModal from "@/components/AvailabilityModal";
+import { AvailabilityModal } from "@/components";
 
 type Room = {
   name: string;
