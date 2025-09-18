@@ -23,7 +23,7 @@ export async function useHomeData() {
 
   const actionCardData: ActionCardItem[] = [
     {
-      title: "Reserva de Salas",
+      title: "Buscar Salas",
       text: "Encontre e reserve salas ou laboratórios",
       buttonText: "Procurar salas disponíveis",
       link: ROOMS_ROUTE,
