@@ -19,7 +19,11 @@ export class Room {
   @Column()
   location: string;
 
-  @Column({ type: 'enum', enum: EnumRoomStatus, default: EnumRoomStatus.AVAILABLE })
+  @Column({
+    type: 'enum',
+    enum: EnumRoomStatus,
+    default: EnumRoomStatus.AVAILABLE,
+  })
   status: EnumRoomStatus;
 
   @Column({ type: 'text', nullable: true })
