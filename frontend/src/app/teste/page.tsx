@@ -1,4 +1,4 @@
-import Availability from "../(dashboard)/salas/Availability";
+import Availability from "../(dashboard)/disponibilidade/page";
 
 export default function TesteAvailabilityPage() {
   return (

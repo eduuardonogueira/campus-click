@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { FaRegClock } from "react-icons/fa";
 
@@ -11,7 +13,7 @@ type Props = {
   defaultEnd?: string;
 };
 
-export default function AvailabilityModal({
+export function AvailabilityModal({
   isOpen,
   onClose,
   mode,

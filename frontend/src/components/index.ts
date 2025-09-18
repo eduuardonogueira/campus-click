@@ -10,4 +10,4 @@ export * from "./EmptyState/EmptyState.salas.component";
 export * from "./EmptyReservations/EmptyReservations";
 export * from "./ReservationCard.component";
 export * from "./ReserveRoomModal.component";
-export { default as AvailabilityModal } from './AvailabilityModal';
+export * from "./AvailabilityModal";

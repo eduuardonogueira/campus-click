@@ -128,13 +128,18 @@ export default function Availability() {
     setSelectedTime(null);
   };
 
-  const defaultValues = selectedDayIndex !== null && selectedTime !== null
-    ? {
-        defaultDay: availabilityList[selectedDayIndex].day,
-        defaultStart: selectedTime.split(" - ")[0],
-        defaultEnd: selectedTime.split(" - ")[1],
-      }
-    : {};
+  const defaultValues: Partial<{
+    defaultDay: string;
+    defaultStart: string;
+    defaultEnd: string;
+  }> =
+    selectedDayIndex !== null && selectedTime !== null
+      ? {
+          defaultDay: availabilityList[selectedDayIndex].day,
+          defaultStart: selectedTime.split(" - ")[0],
+          defaultEnd: selectedTime.split(" - ")[1],
+        }
+      : {};
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
