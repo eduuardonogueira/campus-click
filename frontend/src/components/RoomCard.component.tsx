@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import {
   FaMapMarkerAlt,
@@ -8,6 +9,8 @@ import {
   FaVideo,
 } from "react-icons/fa";
 import { Amenity, IRoom, RoomStatus } from "@/types/room";
+import { useState } from "react";
+import { ReserveRoomModal } from "./ReserveRoomModal.component";
 
 interface IRoomCardProps {
   room: IRoom;
@@ -20,6 +23,8 @@ export function RoomCard({ room }: IRoomCardProps) {
     Wifi: <FaWifi />,
     "Vídeo Conferência": <FaVideo />,
   };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const statusLabels: Record<RoomStatus, string> = {
     available: "Disponível",
@@ -86,17 +91,23 @@ export function RoomCard({ room }: IRoomCardProps) {
         </div>
 
         <button
-          className={`w-full py-3 rounded-md font-semibold text-white transition ${
-            buttonInfo[room.status].disabled
-              ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-              : "bg-black hover:opacity-80 cursor-pointer"
-          }`}
-          disabled={buttonInfo[room.status].disabled}
-        >
-          {buttonInfo[room.status].text}
-        </button>
+            onClick={() => setIsModalOpen(true)}
+            className={`w-full py-3 rounded-md font-semibold text-white transition ${
+              buttonInfo[room.status].disabled
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-black hover:opacity-80 cursor-pointer"
+            }`}
+            disabled={buttonInfo[room.status].disabled}
+          >
+            {buttonInfo[room.status].text}
+          </button>
+        </div>
+        <ReserveRoomModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        room={room}
+      />
       </div>
-    </div>
   );
 }
 

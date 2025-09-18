@@ -54,7 +54,7 @@ export function CreateRoomModal({
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="flex gap-4">
-            <div className="flex flex-col">
+            <div className="flex flex-col flex-1">
               <label className="text-sm font-medium mb-1">Nome da Sala</label>
               <input
                 type="text"
@@ -65,7 +65,7 @@ export function CreateRoomModal({
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col w-28">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
                 type="number"
@@ -116,7 +116,7 @@ export function CreateRoomModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Amenities</label>
+            <label className="block text-sm font-medium mb-2">Recursos</label>
             <div className="flex flex-wrap gap-2 mb-6">
               {Object.keys(amenityIcons).map((amenityKey) => {
                 const amenity = amenityKey as Amenity;
