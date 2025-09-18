@@ -4,7 +4,6 @@ import { ICreateUser, IUser } from "@/types/user";
 import { cookies } from "next/headers";
 import { authFetch } from "./authFetch.ts";
 import { AUTH_COOKIE_KEY } from "@/constants/cookies.ts";
-import { useUser } from "@/hooks/useUser.ts";
 
 export async function login(
   username: string,

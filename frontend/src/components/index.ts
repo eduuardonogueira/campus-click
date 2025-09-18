@@ -15,4 +15,5 @@ export * from "./CreateEditRoomModal.component";
 export * from "./DeleteRoomModal.component";
 export * from "./DeleteReservationModal.component";
 export * from "./ReservationCard.component";
+export * from "./Loader.component";
 

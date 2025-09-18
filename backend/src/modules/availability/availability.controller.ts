@@ -13,7 +13,6 @@ import { AvailabilityService } from './availability.service';
 import {
   CreateAvailabilityDto,
   UpdateAvailabilityDto,
-  DeleteAvailabilityDto,
 } from './dto/availability.dto';
 
 @ApiTags('Availability')
@@ -31,6 +30,12 @@ export class AvailabilityController {
   @ApiOperation({ summary: 'Listar todas as disponibilidades' })
   findAll() {
     return this.service.findAll();
+  }
+
+  @Get('/room/:roomId')
+  @ApiOperation({ summary: 'Listar disponibilidade por sala' })
+  findByRoom(@Param('roomId', ParseIntPipe) roomId: number) {
+    return this.service.findByRoom(roomId);
   }
 
   @Get(':id')

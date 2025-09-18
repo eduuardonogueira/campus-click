@@ -1,42 +1,99 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import {
+  createAvailability,
+  deleteAvailability,
+  updateAvailability,
+} from "@/api";
+import { ICreateAvailability } from "@/types/availability";
+import React, { useState } from "react";
 import { FaRegClock } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
-type Props = {
+type IAvailabilityModalProps = {
   isOpen: boolean;
   onClose: () => void;
   mode: "add" | "edit" | "delete";
-  onConfirm: (data: { day: string; start: string; end: string }) => void;
-  defaultDay?: string;
-  defaultStart?: string;
-  defaultEnd?: string;
+  selectedAvailability?: ICreateAvailability;
+  availabilityId: number;
+  roomId: number;
 };
 
 export function AvailabilityModal({
   isOpen,
   onClose,
   mode,
-  onConfirm,
-  defaultDay = "Segunda-feira",
-  defaultStart = "08:00",
-  defaultEnd = "08:00",
-}: Props) {
-  const [day, setDay] = useState(defaultDay);
-  const [start, setStart] = useState(defaultStart);
-  const [end, setEnd] = useState(defaultEnd);
+  selectedAvailability,
+  availabilityId,
+  roomId,
+}: IAvailabilityModalProps) {
+  const DEFAULT_AVAILABILITY: ICreateAvailability = {
+    weekday: 1,
+    startTime: "08:00",
+    endTime: "12:00",
+    roomId,
+  };
 
   useEffect(() => {
-    if (mode === "add") {
-      setDay("Segunda-feira");
-      setStart("08:00");
-      setEnd("08:00");
+    if (selectedAvailability) {
+      setAvailability(selectedAvailability);
     } else {
-      setDay(defaultDay);
-      setStart(defaultStart);
-      setEnd(defaultEnd);
+      setAvailability(DEFAULT_AVAILABILITY);
     }
-  }, [mode, defaultDay, defaultStart, defaultEnd]);
+  }, [selectedAvailability, roomId]);
+
+  const [availability, setAvailability] = useState<ICreateAvailability>(
+    selectedAvailability || DEFAULT_AVAILABILITY
+  );
+
+  const handleUpdateOrCreateAvailability = async () => {
+    try {
+      const payload = {
+        ...availability,
+        roomId,
+      };
+      const result = await (mode === "add"
+        ? createAvailability(payload)
+        : updateAvailability(payload, availabilityId));
+
+      if (result) {
+        toast.success(
+          `Disponibilidade ${
+            mode === "add" ? "criada" : "atualizada"
+          } com sucesso!`
+        );
+      } else {
+        toast.error("Erro ao salvar disponibilidade.");
+      }
+      onClose();
+    } catch (error) {
+      console.error(
+        `Erro ao ${mode === "add" ? "criar" : "atualizar"} disponibilidade:`,
+        error
+      );
+    }
+  };
+
+  const handleDeleteAvailability = async () => {
+    if (!selectedAvailability || !(selectedAvailability as any).id) {
+      console.error("Nenhuma disponibilidade selecionada para excluir.");
+      return;
+    }
+
+    try {
+      const success = await deleteAvailability(availabilityId);
+
+      if (success) {
+        toast.success("Disponibilidade excluída com sucesso.");
+      } else {
+        toast.error("Erro ao excluir disponibilidade.");
+      }
+      onClose();
+    } catch (error) {
+      console.error("Erro ao deletar disponibilidade:", error);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -45,20 +102,22 @@ export function AvailabilityModal({
       <div className="bg-white rounded-lg w-full max-w-md p-6 shadow-lg">
         {mode === "delete" ? (
           <>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Confirmar Exclusão</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 cursor-pointer">
+              Confirmar Exclusão
+            </h2>
             <p className="text-sm text-gray-600 mb-6">
               Tem certeza que deseja excluir essa disponibilidade?
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 border rounded-md text-sm text-gray-700"
+                className="px-4 py-2 border rounded-md text-sm text-gray-700 cursor-pointer"
               >
                 Cancelar
               </button>
               <button
-                onClick={() => onConfirm({ day, start, end })}
-                className="px-4 py-2 bg-red-600 text-white rounded-md text-sm"
+                onClick={handleDeleteAvailability}
+                className="px-4 py-2 bg-red-600 text-white rounded-md text-sm cursor-pointer"
               >
                 Excluir
               </button>
@@ -67,29 +126,44 @@ export function AvailabilityModal({
         ) : (
           <>
             <h2 className="text-lg font-semibold text-gray-800 mb-1">
-              {mode === "add" ? "Adicionar Disponibilidade" : "Editar Disponibilidade"}
+              {mode === "add"
+                ? "Adicionar Disponibilidade"
+                : "Editar Disponibilidade"}
             </h2>
-            <p className="text-sm text-gray-500 mb-4">Atualize a disponibilidade da sala.</p>
+            <p className="text-sm text-gray-500 mb-4">
+              Atualize a disponibilidade da sala.
+            </p>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Dia da Semana:</label>
+                <label className="block text-sm text-gray-700 mb-1">
+                  Dia da Semana:
+                </label>
                 <select
-                  value={day}
-                  onChange={(e) => setDay(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  value={availability.weekday}
+                  onChange={(e) =>
+                    setAvailability((prev) => ({
+                      ...prev,
+                      weekday: parseInt(e.target.value),
+                    }))
+                  }
+                  className="w-full px-3 py-2 border rounded-md text-sm cursor-pointer"
                 >
                   {[
+                    "Domingo",
                     "Segunda-feira",
                     "Terça-feira",
                     "Quarta-feira",
                     "Quinta-feira",
                     "Sexta-feira",
                     "Sábado",
-                    "Domingo",
-                  ].map((d) => (
-                    <option key={d} value={d}>
-                      {d}
+                  ].map((day, index) => (
+                    <option
+                      key={index}
+                      value={index}
+                      className="cursor-pointer"
+                    >
+                      {day}
                     </option>
                   ))}
                 </select>
@@ -97,30 +171,44 @@ export function AvailabilityModal({
 
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm text-gray-700 mb-1">Horário de Início:</label>
+                  <label className="block text-sm text-gray-700 mb-1">
+                    Horário de Início:
+                  </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                       <FaRegClock />
                     </span>
                     <input
                       type="time"
-                      value={start}
-                      onChange={(e) => setStart(e.target.value)}
-                      className="w-full pl-10 pr-3 py-2 border rounded-md text-sm"
+                      value={availability.startTime}
+                      onChange={(e) =>
+                        setAvailability((prev) => ({
+                          ...prev,
+                          startTime: e.target.value,
+                        }))
+                      }
+                      className="w-full pl-10 pr-3 py-2 border rounded-md text-sm cursor-pointer"
                     />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm text-gray-700 mb-1">Horário de Fim:</label>
+                  <label className="block text-sm text-gray-700 mb-1">
+                    Horário de Fim:
+                  </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                       <FaRegClock />
                     </span>
                     <input
                       type="time"
-                      value={end}
-                      onChange={(e) => setEnd(e.target.value)}
-                      className="w-full pl-10 pr-3 py-2 border rounded-md text-sm"
+                      value={availability.endTime}
+                      onChange={(e) =>
+                        setAvailability((prev) => ({
+                          ...prev,
+                          endTime: e.target.value,
+                        }))
+                      }
+                      className="w-full pl-10 pr-3 py-2 border rounded-md text-sm cursor-pointer"
                     />
                   </div>
                 </div>
@@ -129,13 +217,13 @@ export function AvailabilityModal({
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 border rounded-md text-sm text-gray-700"
+                  className="px-4 py-2 border rounded-md text-sm text-gray-700 cursor-pointer hover:bg-red-400"
                 >
                   Cancelar
                 </button>
                 <button
-                  onClick={() => onConfirm({ day, start, end })}
-                  className="px-4 py-2 bg-black text-white rounded-md text-sm"
+                  onClick={handleUpdateOrCreateAvailability}
+                  className="px-4 py-2 bg-black border text-white rounded-md text-sm cursor-pointer hover:invert"
                 >
                   {mode === "add" ? "Criar" : "Atualizar"}
                 </button>
@@ -147,3 +235,4 @@ export function AvailabilityModal({
     </div>
   );
 }
+

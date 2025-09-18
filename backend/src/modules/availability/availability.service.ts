@@ -34,6 +34,12 @@ export class AvailabilityService {
     return this.availabilityRepository.find({ relations: ['room'] });
   }
 
+  async findByRoom(roomId: number): Promise<Availability[]> {
+    return this.availabilityRepository.find({
+      where: { room: { id: roomId } },
+    });
+  }
+
   async findOne(id: number): Promise<Availability> {
     const availability = await this.availabilityRepository.findOne({
       where: { id },
