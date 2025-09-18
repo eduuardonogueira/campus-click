@@ -108,7 +108,7 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
 
           <div className="flex gap-3">
             <Link
-              href={`${AVAILABILITY_ROUTE}/${room.id}`}
+              href={AVAILABILITY_ROUTE} // ✅ agora não usa mais o room.id
               className="p-2 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-yellow-400"
             >
               <BiAlarm className="text-gray-500 w-5 h-5" />
