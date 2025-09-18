@@ -1,5 +1,10 @@
-export type Amenity = "Projetor" | "Quadro" | "Wifi" | "Vídeo Conferência";
 export type RoomStatus = "available" | "scheduled" | "maintenance";
+export type RoomType = "room" | "laboratory" | "maintenance";
+
+export interface IAmenity {
+  id: number;
+  name: string;
+}
 
 export enum EnumRoomStatus {
   AVAILABLE = "available",
@@ -7,14 +12,39 @@ export enum EnumRoomStatus {
   MAINTENANCE = "maintenance",
 }
 
+export enum EnumRoomType {
+  ROOM = "room",
+  LABORATORY = "laboratory",
+}
+
 export interface IRoom {
   id: number;
   name: string;
   location: string;
   capacity: number;
+  duration: number;
   description: string;
-  amenities: Amenity[];
   status: RoomStatus;
-  imageUrl: string;
+  type: RoomType;
+  imageUrl?: string;
+}
+
+export type IRoomWithAmenities = IRoom & {
+  amenities: {
+    id: number;
+    name: string;
+  }[];
+};
+
+export interface ICreateRoom {
+  name: string;
+  location: string;
+  capacity: number;
+  duration: number;
+  description: string;
+  status: RoomStatus;
+  type: RoomType;
+  imageUrl?: string;
+  amenities?: number[];
 }
 

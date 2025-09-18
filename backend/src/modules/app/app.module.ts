@@ -21,7 +21,8 @@ const config = configuration();
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(), SelfConsultModule,
+    ScheduleModule.forRoot(),
+    SelfConsultModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: config.dbHost,

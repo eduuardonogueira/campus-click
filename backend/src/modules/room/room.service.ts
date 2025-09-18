@@ -4,12 +4,14 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Room } from './entities/room.entity';
 import { Repository } from 'typeorm';
+import { RoomAmenitiesService } from '../room-amenities/room-amenities.service';
 
 @Injectable()
 export class RoomService {
   constructor(
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
+    private roomAmenitiesService: RoomAmenitiesService,
   ) {}
 
   async findAll() {
@@ -19,18 +21,36 @@ export class RoomService {
     if (!findedRooms) {
       throw new HttpException(`Rooms Not Found`, 404);
     }
-    return findedRooms;
+    const formatedAmenities = findedRooms.map((room) => ({
+      ...room,
+      amenities: room.roomAmenities.map((ra) => ({
+        id: ra.amenity.id,
+        name: ra.amenity.name,
+      })),
+      roomAmenities: undefined,
+    }));
+
+    return formatedAmenities;
   }
 
   async findOne(id: number) {
-    const room = await this.roomRepository.findOne({
+    const findedRooms = await this.roomRepository.findOne({
       where: { id },
       relations: ['roomAmenities', 'roomAmenities.amenity'],
     });
-    if (!room) {
+    if (!findedRooms) {
       throw new HttpException(`Room with ID ${id} not found`, 404);
     }
-    return room;
+    const formatedAmenities = {
+      ...findedRooms,
+      amenities: findedRooms.roomAmenities.map((ra) => ({
+        id: ra.amenity.id,
+        name: ra.amenity.name,
+      })),
+      roomAmenities: undefined,
+    };
+
+    return formatedAmenities;
   }
 
   async create(createRoomDto: CreateRoomDto) {
@@ -38,7 +58,30 @@ export class RoomService {
       ...createRoomDto,
       createdAt: new Date(),
     });
-    return await this.roomRepository.save(room);
+
+    const createdRoom = await this.roomRepository.save(room);
+
+    const { amenities } = createRoomDto;
+
+    if (createRoomDto.amenities && createRoomDto.amenities.length > 0) {
+      const roomAmenities = await Promise.all(
+        amenities.map((amenityId) =>
+          this.roomAmenitiesService.create({
+            amenityId: amenityId,
+            roomId: createdRoom.id,
+          }),
+        ),
+      );
+
+      const formatedRoom = {
+        ...createRoomDto,
+        amenities: [...roomAmenities.map((roomAmenity) => roomAmenity.amenity)],
+      };
+
+      return formatedRoom;
+    }
+
+    return createdRoom;
   }
 
   async update(id: number, updateRoomDto: UpdateRoomDto) {

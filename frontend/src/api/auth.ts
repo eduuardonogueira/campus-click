@@ -50,12 +50,9 @@ export async function signup(userData: ICreateUser): Promise<IUser | null> {
 
 export async function validate(): Promise<boolean> {
   try {
-    const response = await authFetch(
-      `${process.env.BACKEND_URL}/auth/validate`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await authFetch("/auth/validate", {
+      method: "GET",
+    });
 
     if (!response || response.status === 401) return false;
 
@@ -68,12 +65,9 @@ export async function validate(): Promise<boolean> {
 
 export async function getProfile(): Promise<IUser | null> {
   try {
-    const response = await authFetch(
-      `${process.env.BACKEND_URL}/auth/profile`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await authFetch("/auth/profile", {
+      method: "GET",
+    });
 
     if (!response || response.status === 401) return null;
 

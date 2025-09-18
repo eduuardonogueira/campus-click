@@ -1,30 +1,16 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { useState } from "react";
-import {
-  FaMapMarkerAlt,
-  FaUsers,
-  FaTv,
-  FaChalkboardTeacher,
-  FaWifi,
-  FaVideo,
-} from "react-icons/fa";
-import { Amenity, IRoom, RoomStatus } from "@/types/room";
+import { FaMapMarkerAlt, FaUsers } from "react-icons/fa";
+import { IRoomWithAmenities, RoomStatus } from "@/types/room";
 import { ReserveRoomModal } from "./ReserveRoomModal.component";
 
 interface IRoomCardProps {
-  room: IRoom;
+  room: IRoomWithAmenities;
 }
 
 export function RoomCard({ room }: IRoomCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const amenityIcons: Record<Amenity, React.ReactNode> = {
-    Projetor: <FaTv />,
-    Quadro: <FaChalkboardTeacher />,
-    Wifi: <FaWifi />,
-    "Vídeo Conferência": <FaVideo />,
-  };
 
   const statusLabels: Record<RoomStatus, string> = {
     available: "Disponível",
@@ -48,7 +34,7 @@ export function RoomCard({ room }: IRoomCardProps) {
     <div className="bg-white border border-gray-200 rounded-lg shadow-md flex flex-col overflow-hidden">
       <div className="relative w-full h-44">
         <Image
-          src={room.imageUrl}
+          src={room.imageUrl ?? ""}
           alt={`Foto da ${room.name}`}
           fill
           className="object-cover"
@@ -82,32 +68,32 @@ export function RoomCard({ room }: IRoomCardProps) {
         <div className="flex flex-wrap gap-2 mb-6">
           {room.amenities.map((amenity) => (
             <span
-              key={amenity}
+              key={amenity.id}
               className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded text-xs text-gray-700"
             >
-              {amenityIcons[amenity]}
-              {amenity}
+              {amenity.name}
             </span>
           ))}
         </div>
 
         <button
-            onClick={() => setIsModalOpen(true)}
-            className={`w-full py-3 rounded-md font-semibold text-white transition ${
-              buttonInfo[room.status].disabled
-                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                : "bg-black hover:opacity-80 cursor-pointer"
-            }`}
-            disabled={buttonInfo[room.status].disabled}
-          >
-            {buttonInfo[room.status].text}
-          </button>
-        </div>
-        <ReserveRoomModal
+          onClick={() => setIsModalOpen(true)}
+          className={`w-full py-3 rounded-md font-semibold text-white transition ${
+            buttonInfo[room.status].disabled
+              ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+              : "bg-black hover:opacity-80 cursor-pointer"
+          }`}
+          disabled={buttonInfo[room.status].disabled}
+        >
+          {buttonInfo[room.status].text}
+        </button>
+      </div>
+      <ReserveRoomModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         room={room}
       />
-      </div>
+    </div>
   );
 }
+

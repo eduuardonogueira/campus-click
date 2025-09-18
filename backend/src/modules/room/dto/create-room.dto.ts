@@ -5,16 +5,16 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EnumRoomStatus } from 'src/types/room';
 import { EnumRoomType } from 'src/types/room';
 
-
 export class CreateRoomDto {
   @ApiProperty({ example: 'Sala 101' })
   @IsNotEmpty()
-  roomName: string;
+  name: string;
 
   @ApiProperty({ example: 30 })
   @IsNotEmpty()
@@ -32,7 +32,9 @@ export class CreateRoomDto {
 
   @ApiProperty({ example: 'disponivel' })
   @IsNotEmpty()
-  @IsEnum(EnumRoomStatus, { message: 'Status must be one of: available, scheduled, maintenance' })
+  @IsEnum(EnumRoomStatus, {
+    message: 'Status must be one of: available, scheduled, maintenance',
+  })
   status: EnumRoomStatus;
 
   @ApiPropertyOptional({ example: 'Sala com projetor' })
@@ -49,4 +51,9 @@ export class CreateRoomDto {
   @IsNotEmpty()
   @IsEnum(EnumRoomType, { message: 'Type must be one of: room, laboratory' })
   type: EnumRoomType;
+
+  @ApiProperty({ example: [1, 2, 3] })
+  @IsOptional()
+  @IsArray()
+  amenities: number[];
 }

@@ -4,31 +4,55 @@ import {
   RoomCard,
   AdminRoomCard,
   EmptyPage,
-  CreateRoomModal,
+  CreateEditRoomModal,
 } from "@/components/index";
+import { toast } from "react-toastify/unstyled";
 import { FaSearch, FaFilter, FaChevronDown } from "react-icons/fa";
-import { mockRooms } from "./mock";
 import { ChangeEvent, useEffect, useState } from "react";
 import { IUser } from "@/types/user";
-import { getProfile } from "@/api/index";
-import { EnumRoomStatus } from "@/types/room";
+import { EnumRoomStatus, IRoomWithAmenities } from "@/types/room";
+import { getProfile, getRooms } from "@/api/index";
 
-export default function SalasPage() {
+export default function RoomPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<IUser | undefined>();
+  const [rooms, setRooms] = useState<IRoomWithAmenities[] | undefined>();
 
   async function fetchUserProfile() {
-    const response = await getProfile();
+    try {
+      const response = await getProfile();
 
-    if (response) setUser(response);
+      if (response) {
+        setUser(response);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar perfil do usuário:", error);
+    }
+  }
+
+  async function fetchRooms() {
+    try {
+      const response = await getRooms();
+
+      if (response) {
+        setRooms(response);
+      }
+    } catch (error) {
+      toast.error("Erro ao buscar salas");
+      console.error("Erro ao buscar perfil do usuário:", error);
+    }
   }
 
   useEffect(() => {
     fetchUserProfile();
   }, []);
 
-  const filteredRooms = mockRooms.filter((room) =>
+  useEffect(() => {
+    fetchRooms();
+  }, [isModalOpen]);
+
+  const filteredRooms = rooms?.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -82,7 +106,7 @@ export default function SalasPage() {
         )}
       </div>
 
-      {filteredRooms.length === 0 ? (
+      {!filteredRooms || filteredRooms.length === 0 ? (
         <EmptyPage
           title="Não há salas cadastradas no sistema"
           message="O administrador não adicionou salas para agendamento"
@@ -92,7 +116,7 @@ export default function SalasPage() {
           <div className="flex gap-2 mb-8">
             <button className="px-4 py-2 border border-green rounded-full bg-green-200 font-black text-green-900">
               {
-                mockRooms.filter(
+                filteredRooms.filter(
                   (room) => room.status === EnumRoomStatus.AVAILABLE
                 ).length
               }{" "}
@@ -100,7 +124,7 @@ export default function SalasPage() {
             </button>
             <button className="px-4 py-2 border border-yellow rounded-full bg-yellow-200 font-black text-yellow-900">
               {
-                mockRooms.filter(
+                filteredRooms.filter(
                   (room) => room.status === EnumRoomStatus.OCCUPIED
                 ).length
               }{" "}
@@ -108,7 +132,7 @@ export default function SalasPage() {
             </button>
             <button className="px-4 py-2 border border-red rounded-full bg-red-200 font-black text-red-900">
               {
-                mockRooms.filter(
+                filteredRooms.filter(
                   (room) => room.status === EnumRoomStatus.MAINTENANCE
                 ).length
               }{" "}
@@ -128,9 +152,10 @@ export default function SalasPage() {
         </>
       )}
 
-      <CreateRoomModal
+      <CreateEditRoomModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        action="create"
       />
     </main>
   );

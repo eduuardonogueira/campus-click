@@ -9,7 +9,7 @@ export class Room {
   id: number;
 
   @Column()
-  roomName: string;
+  name: string;
 
   @Column()
   duration: number;
@@ -20,7 +20,11 @@ export class Room {
   @Column()
   location: string;
 
-  @Column({ type: 'enum', enum: EnumRoomStatus, default: EnumRoomStatus.AVAILABLE })
+  @Column({
+    type: 'enum',
+    enum: EnumRoomStatus,
+    default: EnumRoomStatus.AVAILABLE,
+  })
   status: EnumRoomStatus;
 
   @Column({ type: 'text', nullable: true })
@@ -38,6 +42,8 @@ export class Room {
   @Column({ type: 'enum', enum: EnumRoomType, default: EnumRoomType.ROOM })
   type: EnumRoomType;
 
-  @OneToMany(() => RoomAmenity, (roomAmenity) => roomAmenity.room, { cascade: true })
+  @OneToMany(() => RoomAmenity, (roomAmenity) => roomAmenity.room, {
+    cascade: true,
+  })
   roomAmenities: RoomAmenity[];
 }
