@@ -9,11 +9,10 @@ import {
   FaChalkboardTeacher,
   FaWifi,
   FaVideo,
-  FaEdit,
-  FaTrash,
 } from "react-icons/fa";
 import { Amenity, EnumRoomStatus, IRoom, RoomStatus } from "@/types/room";
 import { EditRoomModal, DeleteRoomModal } from "@/components/index";
+import { BiAlarm, BiEdit, BiTrash } from "react-icons/bi";
 
 interface IRoomCardProps {
   room: IRoom;
@@ -89,10 +88,10 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
           ))}
         </div>
 
-        <div className="flex items-center justify-between gap-3">
-          <div className="relative">
+        <div className="flex items-center justify-between gap-3 ">
+          <div className="w-full box-border">
             <select
-              className="w-52 h-10 border border-gray-600 rounded-md text-sm text-gray-500 px-2"
+              className="w-full h-10 border border-gray-600 rounded-md text-sm text-gray-500 px-4"
               value={room.status}
             >
               <option value={EnumRoomStatus.OCCUPIED}>Reservada</option>
@@ -102,17 +101,20 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
           </div>
 
           <div className="flex gap-3">
+            <button className="p-2 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200">
+              <BiAlarm className="text-gray-500 w-5 h-5" />
+            </button>
             <button
               onClick={() => setEditOpen(true)}
               className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
             >
-              <FaEdit className="text-gray-500" />
+              <BiEdit className="text-gray-500" />
             </button>
             <button
               onClick={() => setDeleteOpen(true)}
               className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-gray-200"
             >
-              <FaTrash className="text-gray-500" />
+              <BiTrash className="text-gray-500" />
             </button>
           </div>
         </div>
