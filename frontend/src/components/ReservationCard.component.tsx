@@ -1,7 +1,7 @@
-import { MapPin, Users } from "lucide-react";
-import { BiTrash } from "react-icons/bi";
-import { Reservation } from "@/types/reservation";
-import styles from "./ReservationCard.module.css";
+import { MapPin, Users, Calendar, Clock } from 'lucide-react';
+import { Reservation } from '@/types/reservation';
+import styles from './ReservationCard.module.css';
+import { BiTrash } from 'react-icons/bi';
 
 interface ReservationCardProps {
   reservation: Reservation;
@@ -29,22 +29,28 @@ export function ReservationCard({ reservation, onDelete }: ReservationCardProps)
           <MapPin size={16} />
           {reservation.local}
         </span>
-        <span className={styles.infoItem}>
+        <span className="flex items-center gap-2">
           <Users size={16} />
           {reservation.capacidade} Pessoas
         </span>
       </div>
 
-      {/* Data e Horário */}
-      <div className={styles.metaInfoRow}>
-        <span className={styles.infoItem}>{reservation.data}</span>
-        <span className={styles.infoItem}>{reservation.horario}</span>
+      {/* Linha de Meta-informações 2 */}
+      <div className="flex flex-wrap gap-6 text-gray-500 text-sm mb-3">
+        <span className="flex items-center gap-2">
+          <Calendar size={16} />
+          {reservation.data}
+        </span>
+        <span className="flex items-center gap-2">
+          <Clock size={16} />
+          {reservation.horario}
+        </span>
       </div>
 
-      {/* Propósito */}
-      <p className={styles.purpose}>
+      <p className="text-sm text-gray-700 mt-4">
         <strong>Propósito:</strong> {reservation.proposito}
       </p>
     </div>
   );
 }
+

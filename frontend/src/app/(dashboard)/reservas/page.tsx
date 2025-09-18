@@ -1,14 +1,12 @@
 "use client";
 
+import styles from "./page.module.css";
 import { useState } from "react";
 import { Calendar } from "lucide-react";
 import { FaFilter } from "react-icons/fa";
-import { ReservationCard } from "@/components/ReservationCard.component";
-import { DeleteReservationModal } from "@/components/DeleteReservationModal.component";
-import { EmptyState } from "@/components/EmptyState";
+import { EmptyState, DeleteReservationModal, ReservationCard } from "@/components/index";
 import { mockReservations } from "./mock";
 import { ROOMS_ROUTE } from "@/constants/routes";
-import styles from "./page.module.css";
 import { Reservation } from "@/types/reservation";
 
 export default function MyReservationsPage() {
@@ -28,12 +26,11 @@ export default function MyReservationsPage() {
   };
 
   return (
-    <div className={styles.mainContainer}>
-      {/* Cabeçalho */}
-      <header className={styles.header}>
-        <div className={styles.titleWrapper}>
+    <div className="max-w-4xl mx-auto px-6 box-border my-10">
+      <header className="flex justify-between items-center mb-8">
+        <div className="flex items-center space-x-4">
           <Calendar size={32} />
-          <h1>Minhas Reservas</h1>
+          <h1 className="text-3xl font-bold text-gray-800">Minhas Reservas</h1>
         </div>
         <div className="flex relative">
           <FaFilter className="absolute left-3 top-3 text-gray-500" />
@@ -46,7 +43,7 @@ export default function MyReservationsPage() {
       {/* Conteúdo */}
       <main>
         {reservations.length > 0 ? (
-          <div className={styles.reservationsList}>
+          <div className="flex flex-col gap-4">
             {reservations.map((reservation) => (
               <ReservationCard
                 key={reservation.id}
@@ -56,7 +53,7 @@ export default function MyReservationsPage() {
             ))}
           </div>
         ) : (
-          <EmptyState
+          <EmptyReservations
             title="Sem Reservas Atualmente"
             message="Você não agendou nenhuma sala no momento"
             buttonText="Agendar Agora"
