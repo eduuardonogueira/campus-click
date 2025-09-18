@@ -36,7 +36,7 @@ export class UserService {
         title: a.title,
         room: {
           id: a.room.id,
-          name: a.room.roomName,
+          name: a.room.name,
           location: a.room.location,
           capacity: a.room.capacity,
           status: a.room.status,
