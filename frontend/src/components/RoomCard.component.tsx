@@ -105,7 +105,7 @@ export function RoomCard({ room }: IRoomCardProps) {
         <ReserveRoomModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        room={sala}
+        room={room}
       />
       </div>
   );

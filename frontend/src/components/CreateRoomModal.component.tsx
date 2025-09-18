@@ -60,12 +60,8 @@ export function CreateRoomModal({
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange("name", e.target.value)}
-<<<<<<< HEAD:frontend/src/components/CreateRoomModal.tsx
-                className="border rounded-lg border-gray-300 p-2 w-full text-sm text-gray-600"
-=======
                 className="border rounded-md p-2 min-w-[250px] border-gray-300 text-sm text-gray-600"
                 placeholder="Sala 01"
->>>>>>> main:frontend/src/components/CreateRoomModal.component.tsx
               />
             </div>
 
@@ -74,18 +70,8 @@ export function CreateRoomModal({
               <input
                 type="number"
                 value={formData.capacity === 0 ? "" : formData.capacity}
-<<<<<<< HEAD:frontend/src/components/CreateRoomModal.tsx
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (/^\d*$/.test(value)) {
-                    handleChange("capacity", value === "" ? 0 : Number(value));
-                  }
-                }}
-                className="border rounded-lg border-gray-300 p-2 text-sm text-gray-600 [appearance:textfield]"
-=======
                 onChange={(e) => handleChange("capacity", e.target.value)}
                 className="border rounded-md p-2 min-w-[60px] [appearance:textfield] border-gray-300 text-sm text-gray-600"
->>>>>>> main:frontend/src/components/CreateRoomModal.component.tsx
                 inputMode="numeric"
                 placeholder="30"
               />
@@ -100,12 +86,8 @@ export function CreateRoomModal({
               type="text"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-<<<<<<< HEAD:frontend/src/components/CreateRoomModal.tsx
-              className="w-full border rounded-lg p-2 border-gray-300 text-sm text-gray-600"
-=======
               className="w-full border rounded-md p-2 border-gray-300 text-sm text-gray-600"
               placeholder="Prédio 101"
->>>>>>> main:frontend/src/components/CreateRoomModal.component.tsx
             />
           </div>
 
@@ -114,41 +96,23 @@ export function CreateRoomModal({
             <textarea
               value={formData.description}
               onChange={(e) => handleChange("description", e.target.value)}
-<<<<<<< HEAD:frontend/src/components/CreateRoomModal.tsx
-              className="w-full h-20 border rounded-lg p-2 border-gray-300 text-sm text-gray-600 text-sm text-gray-600"
-            />
-          </div>
-
-          {/* Status */}
-          <div className="relative">
-=======
               className="w-full border rounded-md p-2 border-gray-300 text-sm text-gray-600"
               placeholder="Sala ao lado do banheiro..."
             />
           </div>
 
           <div>
->>>>>>> main:frontend/src/components/CreateRoomModal.component.tsx
             <label className="block text-sm font-medium mb-1">Status</label>
             <select
               value={formData.status}
               onChange={(e) => handleChange("status", e.target.value)}
-<<<<<<< HEAD:frontend/src/components/CreateRoomModal.tsx
-              className="w-32 h-10 border border-gray-300 text-sm rounded-lg p-2 text-gray-600 appearance-none pr-10 pl-3"
-=======
               className="border rounded-md p-2 border-gray-300appearance-none pr-10 pl-3 text-sm text-gray-600 cursor-pointer"
->>>>>>> main:frontend/src/components/CreateRoomModal.component.tsx
             >
               <option>Disponível</option>
               <option>Reservada</option>
               <option>Manutenção</option>
             </select>
-<<<<<<< HEAD:frontend/src/components/CreateRoomModal.tsx
-            {/* Ícone da seta */}
-            <FaChevronDown className="absolute left-25 top-9 text-gray-400 pointer-events-none" />
-=======
             <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-200 pointer-events-none" />
->>>>>>> main:frontend/src/components/CreateRoomModal.component.tsx
           </div>
 
           <div>

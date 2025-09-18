@@ -9,11 +9,7 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
-<<<<<<< HEAD
-    "lucide-react": "^0.544.0",
-=======
     "lucide-react": "^0.543.0",
->>>>>>> main
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
