@@ -1,5 +1,11 @@
 export type Amenity = "Projetor" | "Quadro" | "Wifi" | "Vídeo Conferência";
-export type RoomStatus = "Disponível" | "Ocupado" | "Manutenção";
+export type RoomStatus = "available" | "scheduled" | "maintenance";
+
+export enum EnumRoomStatus {
+  AVAILABLE = "available",
+  OCCUPIED = "scheduled",
+  MAINTENANCE = "maintenance",
+}
 
 export interface IRoom {
   id: number;
