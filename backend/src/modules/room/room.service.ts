@@ -33,7 +33,9 @@ export class RoomService {
   }
 
   async findAll() {
-    const findedRooms = await this.roomRepository.find();
+    const findedRooms = await this.roomRepository.find({
+      relations: ['roomAmenities', 'roomAmenities.amenity'],
+    });
     if (!findedRooms) {
       throw new HttpException(`Rooms Not Found`, 404);
     }
@@ -41,7 +43,10 @@ export class RoomService {
   }
 
   async findOne(id: number) {
-    const room = await this.roomRepository.findOne({ where: { id } });
+    const room = await this.roomRepository.findOne({
+      where: { id },
+      relations: ['roomAmenities', 'roomAmenities.amenity'],
+    });
     if (!room) {
       throw new HttpException(`Room with ID ${id} not found`, 404);
     }

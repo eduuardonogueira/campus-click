@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { RoomAmenity } from '../../room-amenities/entities/room-amenity.entity';
 import { EnumRoomType } from 'src/types/room';
 import { EnumRoomStatus } from 'src/types/room';
 
@@ -40,4 +41,7 @@ export class Room {
 
   @Column({ type: 'enum', enum: EnumRoomType, default: EnumRoomType.ROOM })
   type: EnumRoomType;
+
+  @OneToMany(() => RoomAmenity, (roomAmenity) => roomAmenity.room, { cascade: true })
+  roomAmenities: RoomAmenity[];
 }

@@ -1,15 +1,14 @@
-import Link from "next/link";
 import { CalendarX } from "lucide-react";
 
-interface EmptyStateProps {
+interface IEmptyPageProps {
   title: string;
   message: string;
 }
 
-export function EmptyState({
+export function EmptyPage({
   title,
   message,
-}: EmptyStateProps) {
+}: IEmptyPageProps) {
   return (
     <div className="border border-gray-300 rounded-lg p-16 text-center flex flex-col items-center justify-center mt-6">
       <div className="text-gray-400 mb-6">

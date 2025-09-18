@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image";
+import { useState } from "react";
 import {
   FaMapMarkerAlt,
   FaUsers,
@@ -9,7 +10,6 @@ import {
   FaVideo,
 } from "react-icons/fa";
 import { Amenity, IRoom, RoomStatus } from "@/types/room";
-import { useState } from "react";
 import { ReserveRoomModal } from "./ReserveRoomModal.component";
 
 interface IRoomCardProps {
@@ -17,14 +17,14 @@ interface IRoomCardProps {
 }
 
 export function RoomCard({ room }: IRoomCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const amenityIcons: Record<Amenity, React.ReactNode> = {
     Projetor: <FaTv />,
     Quadro: <FaChalkboardTeacher />,
     Wifi: <FaWifi />,
     "Vídeo Conferência": <FaVideo />,
   };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const statusLabels: Record<RoomStatus, string> = {
     available: "Disponível",
@@ -39,7 +39,7 @@ export function RoomCard({ room }: IRoomCardProps) {
   };
 
   const buttonInfo: Record<RoomStatus, { text: string; disabled: boolean }> = {
-    available: { text: "Reservar room", disabled: false },
+    available: { text: "Reservar sala", disabled: false },
     scheduled: { text: "Reservada", disabled: true },
     maintenance: { text: "Em manutenção", disabled: true },
   };
@@ -69,6 +69,7 @@ export function RoomCard({ room }: IRoomCardProps) {
           <FaMapMarkerAlt className="w-4 h-4" />
           <p>{room.location}</p>
         </div>
+
         <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
           <FaUsers className="w-4 h-4" />
           <p>{room.capacity} Pessoas</p>
@@ -110,4 +111,3 @@ export function RoomCard({ room }: IRoomCardProps) {
       </div>
   );
 }
-

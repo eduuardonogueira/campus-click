@@ -1,14 +1,28 @@
-"use server";
+"use client";
 
-import { HOME_ROUTE } from "@/constants/routes";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { HOME_ROUTE } from "@/constants/routes";
 import { FaCalendarAlt, FaUserCircle } from "react-icons/fa";
 import { LogoutButton } from "./index";
 import { IUser } from "@/types/user";
 import { getProfile } from "@/api";
 
-export async function Navbar() {
-  const user: IUser | null = await getProfile();
+export function Navbar() {
+  const [user, setUser] = useState<IUser | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const profile = await getProfile();
+        setUser(profile);
+      } catch (error) {
+        console.error("Erro ao buscar perfil do usuário:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <header className="flex justify-between px-9 py-3 items-center border-b-gray-900 border-1">
@@ -23,9 +37,9 @@ export async function Navbar() {
         <div className="flex gap-2">
           <FaUserCircle className="text-5xl" />
           <div className="flex flex-col justify-center align-top">
-            <span className="">{user?.fullName}</span>
+            <span>{user?.fullName || "Carregando..."}</span>
             <span className="text-sm bg-black py-1 px-4 text-white w-min rounded-2xl">
-              {user?.role}
+              {user?.role || "..." }
             </span>
           </div>
         </div>
@@ -37,4 +51,3 @@ export async function Navbar() {
     </header>
   );
 }
-

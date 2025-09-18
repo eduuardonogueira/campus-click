@@ -18,11 +18,15 @@ import { RoomAmenity } from '../room-amenities/entities/room-amenity.entity';
 import { RoomAmenitiesModule } from '../room-amenities/room-amenities.module';
 import { AvailabilityModule } from '../availability/availability.module';
 import { AppointmentModule } from '../appointments/appointment.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SelfConsultModule } from 'src/tasks/self-consult/self-consult.module';
 
 const config = configuration();
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
+    SelfConsultModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: config.dbHost,

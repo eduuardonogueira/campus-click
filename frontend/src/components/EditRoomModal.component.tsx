@@ -150,7 +150,7 @@ export function EditRoomModal({
                     key={amenity}
                     type="button"
                     onClick={() => toggleAmenity(amenity)}
-                    className={`flex items-center gap-1 px-2 py-1 rounded-xl text-sm font-medium transition ${
+                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm font-medium cursor-pointer transition ${
                       isSelected
                         ? "bg-gray-900 text-white"
                         : "bg-gray-200 text-gray-600 hover:bg-gray-300"
