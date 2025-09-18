@@ -28,6 +28,7 @@ const amenityIcons: Record<Amenity, React.ReactNode> = {
 export function AdminRoomCard({ room }: IRoomCardProps) {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
+  const [status, setStatus] = useState<RoomStatus>(room.status);
 
   const statusClass: Record<RoomStatus, string> = {
     available: "bg-green-200 text-green-900 border",
@@ -41,6 +42,12 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
     maintenance: "Manutenção",
   };
 
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value as RoomStatus;
+    setStatus(newStatus);
+    console.log("Novo status selecionado:", newStatus);
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-md flex flex-col overflow-hidden">
       <div className="relative w-full h-48">
@@ -52,10 +59,10 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
         />
         <span
           className={`absolute top-4 right-4 px-3 py-1 rounded-xl text-xs font-bold ${
-            statusClass[room.status]
+            statusClass[status]
           }`}
         >
-          {statusLabels[room.status]}
+          {statusLabels[status]}
         </span>
       </div>
 
@@ -72,9 +79,7 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
           <p>{room.capacity} Pessoas</p>
         </div>
 
-        <p className="text-sm text-gray-700 flex-grow mb-4">
-          {room.description}
-        </p>
+        <p className="text-sm text-gray-700 flex-grow mb-4">{room.description}</p>
 
         <div className="flex flex-wrap gap-2 mb-6">
           {room.amenities?.map((amenity: Amenity) => (
@@ -88,11 +93,12 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
           ))}
         </div>
 
-        <div className="flex items-center justify-between gap-3 ">
+        <div className="flex items-center justify-between gap-3">
           <div className="w-full box-border">
             <select
               className="w-full h-10 border border-gray-600 rounded-md text-sm text-gray-500 px-4"
-              value={room.status}
+              value={status}
+              onChange={handleStatusChange}
             >
               <option value={EnumRoomStatus.OCCUPIED}>Reservada</option>
               <option value={EnumRoomStatus.AVAILABLE}>Disponível</option>
@@ -136,4 +142,3 @@ export function AdminRoomCard({ room }: IRoomCardProps) {
     </div>
   );
 }
-
