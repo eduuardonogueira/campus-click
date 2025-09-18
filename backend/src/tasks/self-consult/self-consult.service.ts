@@ -10,27 +10,9 @@ export class SelfConsultService {
   @Cron(CronExpression.EVERY_MINUTE)
   async keepAlivePing() {
     try {
-      const config = configuration(); // Pega as variáveis do configuration.ts
+      const config = configuration();
       
-      let url = '';
-      // Caso eu tenha uma URL externa (Render)
-      if (config.externalUrl) {
-        url = config.externalUrl;
-
-        // Caso eu tenha o hostname interno (Render)
-      } else if (config.internalHostname) {
-        // Monta a URL completa com o hostname ex: http://<internalHostname>:<port>
-        url = `http://${config.internalHostname}:${config.port || 3001}`;
-
-        // Caso eu tenha uma URL de host completa
-      } else if (config.hostUrl) {
-        url = config.hostUrl;
-
-        // Senão usa localhost
-      } else {
-        url = 'http://localhost:3001'; // GET / (endpoint de health check)
-      }
-
+      const url = `${config.backendUrl || 'http://localhost:' + config.port}/`; // Usa a variável BACKEND_URL ou localhost como fallback
       const res = await fetch(url); // O endpoint raiz (/) retorna 200 se o backend estiver vivo
       this.logger.log(`Keep-alive ping sent to ${url} - status: ${res.status}`);
     } catch (err) {
