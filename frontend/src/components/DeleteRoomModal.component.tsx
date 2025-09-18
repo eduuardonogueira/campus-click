@@ -22,13 +22,13 @@ export function DeleteRoomModal({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-1 border border-gray-400 bg-white rounded hover:bg-gray-300"
+            className="px-5 py-1 border border-gray-400 bg-white rounded hover:bg-gray-300 cursor-pointer"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            className="px-6 py-1 bg-red-600 text-white rounded hover:bg-black"
+            className="px-6 py-1 bg-red-600 text-white rounded hover:bg-black cursor-pointer"
           >
             Excluir
           </button>

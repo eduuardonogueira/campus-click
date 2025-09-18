@@ -143,31 +143,6 @@ export default function Availability() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 border-b">
-        <Link href="/" className="flex items-center gap-2">
-          <FaRegCalendarAlt className="text-xl text-black" />
-          <span className="text-xl font-bold text-black">Campus Click</span>
-        </Link>
-
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <FaUserCircle className="text-3xl text-black" />
-            <div className="flex flex-col">
-              <span className="font-semibold text-gray-800">Usuário Normal</span>
-              <span className="bg-black text-white text-xs px-3 py-1 rounded-full w-min">Aluno</span>
-            </div>
-          </div>
-          <button className="text-xl text-gray-600 hover:text-black">
-            <FaCog />
-          </button>
-          <Link href="/">
-            <button className="text-xl text-gray-600 hover:text-black">
-              <FaSignOutAlt />
-            </button>
-          </Link>
-        </div>
-      </nav>
-
       <main className="p-10 flex-1">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">

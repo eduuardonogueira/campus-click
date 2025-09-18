@@ -7,7 +7,6 @@ import { Room } from '../room/entities/room.entity';
 import { Amenity } from '../amenities/entities/amenity.entity';
 import { Repository } from 'typeorm';
 
-
 @Injectable()
 export class RoomAmenitiesService {
   constructor(
@@ -20,9 +19,13 @@ export class RoomAmenitiesService {
   ) {}
 
   async create(createRoomAmenityDto: CreateRoomAmenityDto) {
-    const room = await this.roomRepository.findOne({ where: { id: createRoomAmenityDto.roomId } });
+    const room = await this.roomRepository.findOne({
+      where: { id: createRoomAmenityDto.roomId },
+    });
     if (!room) throw new HttpException('Room not found', 404);
-    const amenity = await this.amenityRepository.findOne({ where: { id: createRoomAmenityDto.amenityId } });
+    const amenity = await this.amenityRepository.findOne({
+      where: { id: createRoomAmenityDto.amenityId },
+    });
     if (!amenity) throw new HttpException('Amenity not found', 404);
     const roomAmenity = this.roomAmenityRepository.create({
       room,
@@ -31,38 +34,47 @@ export class RoomAmenitiesService {
     return await this.roomAmenityRepository.save(roomAmenity);
   }
 
-
   async findAll() {
-    return await this.roomAmenityRepository.find({ relations: ['room', 'amenity'] });
+    return await this.roomAmenityRepository.find({
+      relations: ['room', 'amenity'],
+    });
   }
 
-
   async findOne(id: number) {
-    const roomAmenity = await this.roomAmenityRepository.findOne({ where: { id }, relations: ['room', 'amenity'] });
+    const roomAmenity = await this.roomAmenityRepository.findOne({
+      where: { id },
+      relations: ['room', 'amenity'],
+    });
     if (!roomAmenity) {
       throw new HttpException(`RoomAmenity with ID ${id} not found`, 404);
     }
     return roomAmenity;
   }
 
-
   async update(id: number, updateRoomAmenityDto: UpdateRoomAmenityDto) {
-    const roomAmenity = await this.roomAmenityRepository.findOne({ where: { id } });
+    const roomAmenity = await this.roomAmenityRepository.findOne({
+      where: { id },
+    });
     if (!roomAmenity) {
       throw new HttpException('RoomAmenity not found', 404);
     }
-    const room = await this.roomRepository.findOne({ where: { id: updateRoomAmenityDto.roomId } });
+    const room = await this.roomRepository.findOne({
+      where: { id: updateRoomAmenityDto.roomId },
+    });
     if (!room) throw new HttpException('Room not found', 404);
-    const amenity = await this.amenityRepository.findOne({ where: { id: updateRoomAmenityDto.amenityId } });
+    const amenity = await this.amenityRepository.findOne({
+      where: { id: updateRoomAmenityDto.amenityId },
+    });
     if (!amenity) throw new HttpException('Amenity not found', 404);
     roomAmenity.room = room;
     roomAmenity.amenity = amenity;
     return this.roomAmenityRepository.save(roomAmenity);
   }
 
-
   async remove(id: number) {
-    const roomAmenity = await this.roomAmenityRepository.findOne({ where: { id } });
+    const roomAmenity = await this.roomAmenityRepository.findOne({
+      where: { id },
+    });
     if (!roomAmenity) {
       throw new HttpException(`RoomAmenity with ID ${id} not found`, 404);
     }

@@ -9,7 +9,7 @@ export class Room {
   id: number;
 
   @Column()
-  roomName: string;
+  name: string;
 
   @Column()
   duration: number;
@@ -42,6 +42,8 @@ export class Room {
   @Column({ type: 'enum', enum: EnumRoomType, default: EnumRoomType.ROOM })
   type: EnumRoomType;
 
-  @OneToMany(() => RoomAmenity, (roomAmenity) => roomAmenity.room, { cascade: true })
+  @OneToMany(() => RoomAmenity, (roomAmenity) => roomAmenity.room, {
+    cascade: true,
+  })
   roomAmenities: RoomAmenity[];
 }
