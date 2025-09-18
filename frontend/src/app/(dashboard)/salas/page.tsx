@@ -3,7 +3,7 @@
 import {
   RoomCard,
   AdminRoomCard,
-  EmptyState,
+  EmptyPage,
   CreateRoomModal,
 } from "@/components/index";
 import { FaSearch, FaFilter, FaChevronDown } from "react-icons/fa";
@@ -83,7 +83,7 @@ export default function SalasPage() {
       </div>
 
       {filteredRooms.length === 0 ? (
-        <EmptyState
+        <EmptyPage
           title="Não há salas cadastradas no sistema"
           message="O administrador não adicionou salas para agendamento"
         />
