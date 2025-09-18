@@ -1,11 +1,28 @@
-import { Calendar } from 'lucide-react';
-import { ReservationCard } from '@/components/ReservationCard.component';
-import { mockReservations } from './mock';
-import { EmptyReservations } from '@/components/EmptyReservations/EmptyReservations';
-import { ROOMS_ROUTE } from '@/constants/routes'; 
+"use client";
+
+import { useState } from "react";
+import { Calendar } from "lucide-react";
+import { FaChevronDown, FaFilter } from "react-icons/fa";
+import { DeleteReservationModal, EmptyReservations, ReservationCard } from "@/components/index";
+import { mockReservations } from "./mock";
+import { ROOMS_ROUTE } from "@/constants/routes";
+import { Reservation } from "@/types/reservation";
 
 export default function MyReservationsPage() {
-  const reservations = mockReservations;
+  const [reservations, setReservations] = useState<Reservation[]>(mockReservations);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+
+  const handleRequestDelete = (id: number) => {
+    const reservation = reservations.find((r) => r.id === id) || null;
+    setSelectedReservation(reservation);
+  };
+  
+  const handleConfirmDelete = () => {
+    if (selectedReservation) {
+      setReservations((prev) => prev.filter((r) => r.id !== selectedReservation.id));
+      setSelectedReservation(null);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-6 box-border my-10">
@@ -14,10 +31,12 @@ export default function MyReservationsPage() {
           <Calendar size={32} />
           <h1 className="text-3xl font-bold text-gray-800">Minhas Reservas</h1>
         </div>
-        <div className="relative">
-          <div className="border border-gray-300 rounded-md py-2 px-4 min-w-[200px] flex justify-between items-center text-gray-600 bg-white cursor-pointer hover:bg-gray-50 text-sm">
-            Filtros
-          </div>
+        <div className="relative flex items-center">
+          <FaFilter className="absolute left-4 text-gray-500" />
+          <select className="min-w-[220px] pl-10 pr-4 h-10 rounded-lg border border-gray-600 bg-gray-50 text-base text-gray-900 appearance-none">
+            <option>Filtros</option>
+          </select>
+          <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
         </div>
       </header>
 
@@ -25,7 +44,11 @@ export default function MyReservationsPage() {
         {reservations.length > 0 ? (
           <div className="flex flex-col gap-4">
             {reservations.map((reservation) => (
-              <ReservationCard key={reservation.id} reservation={reservation} />
+              <ReservationCard
+                key={reservation.id}
+                reservation={reservation}
+                onDelete={handleRequestDelete}
+              />
             ))}
           </div>
         ) : (
@@ -33,10 +56,17 @@ export default function MyReservationsPage() {
             title="Sem Reservas Atualmente"
             message="Você não agendou nenhuma sala no momento"
             buttonText="Agendar Agora"
-            buttonHref={ROOMS_ROUTE} 
+            buttonHref={ROOMS_ROUTE}
           />
         )}
       </main>
+
+      <DeleteReservationModal
+        isOpen={!!selectedReservation}
+        reservationTitle={selectedReservation?.titulo}
+        onClose={() => setSelectedReservation(null)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

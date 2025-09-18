@@ -7,7 +7,14 @@ export * from "./CreateRoomModal.component";
 export * from "./EditRoomModal.component";
 export * from "./DeleteRoomModal.component";
 export * from "./EmptyState/EmptyState.salas.component";
-export * from "./EmptyReservations/EmptyReservations";
 export * from "./ReservationCard.component";
 export * from "./ReserveRoomModal.component";
 export * from "./AvailabilityModal";
+export * from "./EmptyState/EmptyState.salas.component";
+export * from "./EmptyReservations.component";
+export * from "./CreateRoomModal.component";
+export * from "./EditRoomModal.component";
+export * from "./DeleteRoomModal.component";
+export * from "./DeleteReservationModal.component";
+export * from "./ReservationCard.component";
+

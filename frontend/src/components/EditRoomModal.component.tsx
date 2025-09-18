@@ -71,7 +71,9 @@ export function EditRoomModal({
       <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6 relative">
         <h2 className="text-xl font-bold">Editar Sala</h2>
         <p className="text-gray-400 mb-4">
+          
           Atualize e configure as informações da sala
+        
         </p>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -86,6 +88,7 @@ export function EditRoomModal({
               />
             </div>
 
+            {/* Capacidade */}
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
