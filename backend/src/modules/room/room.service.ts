@@ -17,16 +17,15 @@ export class RoomService {
     private readonly availabilityService: AvailabilityService,
     private readonly appointmentService: AppointmentService,
   ) {}
+
   async getRoomDetails(id: number) {
     const room = await this.findOne(id);
-    const availability = await this.availabilityService.findAll();
-    const appointments = await this.appointmentService.findAll();
-    const roomAvailability = availability.filter((a) => a.room.id === id);
-    const roomAppointments = appointments.filter((ap) => ap.room.id === id);
+    const availability = await this.availabilityService.findByRoom(id);
+    const appointments = await this.appointmentService.findByRoom(id);
     return {
       room,
-      availability: roomAvailability,
-      appointments: roomAppointments,
+      availability,
+      appointments,
     };
   }
 
@@ -109,8 +108,6 @@ export class RoomService {
       const toRemove = currentAmenitiesIds.filter(
         (id) => !newAmenitiesIds.includes(id),
       );
-
-      console.log(toRemove);
 
       const toAdd = newAmenitiesIds.filter(
         (id) => !currentAmenitiesIds.includes(id),

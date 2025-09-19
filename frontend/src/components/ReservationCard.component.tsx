@@ -11,10 +11,10 @@ export function ReservationCard({
   reservation,
   onDelete,
 }: ReservationCardProps) {
+
   return (
     <div className="border border-gray-400 rounded-md p-6">
       <div className="flex justify-between items-center">
-        {/* Adicionar as informaçöes da sala no componente inteiro */}
         <h2 className="font-bold text-2xl">{reservation.titulo}</h2>
         <button
           onClick={() => onDelete(reservation.id)}
