@@ -51,6 +51,19 @@ export class RoomAmenitiesService {
     return roomAmenity;
   }
 
+  async findByRoomAndAmenityId(roomId: number, amenityId: number) {
+    const findedRoomAmenity = await this.roomAmenityRepository.findOne({
+      where: { room: { id: roomId }, amenity: { id: amenityId } },
+    });
+    if (!findedRoomAmenity) {
+      throw new HttpException(
+        `RoomAmenity with roomID ${roomId} and amenityID ${amenityId} not found`,
+        404,
+      );
+    }
+    return findedRoomAmenity;
+  }
+
   async update(id: number, updateRoomAmenityDto: UpdateRoomAmenityDto) {
     const roomAmenity = await this.roomAmenityRepository.findOne({
       where: { id },
@@ -79,5 +92,14 @@ export class RoomAmenitiesService {
       throw new HttpException(`RoomAmenity with ID ${id} not found`, 404);
     }
     return this.roomAmenityRepository.delete(id);
+  }
+
+  async deleteByRoomAndAmenityId(roomId: number, amenityId: number) {
+    const deletedRoomAmenity = await this.findByRoomAndAmenityId(
+      roomId,
+      amenityId,
+    );
+
+    return this.roomAmenityRepository.delete(deletedRoomAmenity.id);
   }
 }

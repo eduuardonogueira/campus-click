@@ -45,6 +45,31 @@ export async function createRoom(
   }
 }
 
+export async function updateRoom(
+  roomData: Partial<ICreateRoom>,
+  roomId: number
+): Promise<IRoomWithAmenities[] | null> {
+  try {
+    const response = await authFetch(`/room/${roomId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(roomData),
+    });
+
+    if (!response.ok) {
+      console.error("Erro na requisição:", response.status);
+      return null;
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Erro ao atualizar sala:", error);
+    return null;
+  }
+}
+
 export async function deleteRoom(roomId: number): Promise<boolean> {
   try {
     const response = await authFetch(`/room/${roomId}`, {

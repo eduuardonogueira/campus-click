@@ -7,7 +7,7 @@ import { EnumRoomStatus, EnumRoomType } from 'src/types/room';
 export class UpdateRoomDto extends PartialType(CreateRoomDto) {
   @IsOptional()
   @IsString()
-  roomName: string;
+  name: string;
 
   @IsOptional()
   @IsNumber({ allowNaN: false }, { message: 'Duration must be a valid number' })

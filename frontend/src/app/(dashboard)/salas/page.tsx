@@ -171,6 +171,7 @@ export default function RoomPage() {
       )}
 
       <CreateEditRoomModal
+        roomId={0}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         action="create"
