@@ -5,6 +5,7 @@ import {
   AdminRoomCard,
   EmptyPage,
   CreateEditRoomModal,
+  Loader,
 } from "@/components/index";
 import { toast } from "react-toastify/unstyled";
 import { FaSearch, FaFilter, FaChevronDown } from "react-icons/fa";
@@ -19,6 +20,10 @@ export default function RoomPage() {
   const [user, setUser] = useState<IUser | undefined>();
   const [rooms, setRooms] = useState<IRoomWithAmenities[] | undefined>();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
   async function fetchUserProfile() {
     try {
       const response = await getProfile();
@@ -32,6 +37,7 @@ export default function RoomPage() {
   }
 
   async function fetchRooms() {
+    setIsLoading(true);
     try {
       const response = await getRooms();
 
@@ -42,6 +48,7 @@ export default function RoomPage() {
       toast.error("Erro ao buscar salas");
       console.error("Erro ao buscar perfil do usuário:", error);
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -50,7 +57,7 @@ export default function RoomPage() {
 
   useEffect(() => {
     fetchRooms();
-  }, [isModalOpen]);
+  }, [isModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
   const filteredRooms = rooms?.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
@@ -58,6 +65,10 @@ export default function RoomPage() {
 
   function handleSearchChange(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
+  }
+
+  if (isLoading && !rooms) {
+    return <Loader text="Carregando Salas..." />;
   }
 
   return (
@@ -143,7 +154,14 @@ export default function RoomPage() {
           <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
             {filteredRooms.map((room) =>
               user?.role === "admin" ? (
-                <AdminRoomCard key={room.id} room={room} />
+                <AdminRoomCard
+                  isEditModalOpen={isEditModalOpen}
+                  isDeleteModalOpen={isDeleteModalOpen}
+                  setEditModalOpen={setEditModalOpen}
+                  setDeleteModalOpen={setDeleteModalOpen}
+                  key={room.id}
+                  room={room}
+                />
               ) : (
                 <RoomCard key={room.id} room={room} />
               )
