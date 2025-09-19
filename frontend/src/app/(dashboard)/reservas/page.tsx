@@ -11,32 +11,27 @@ import {
 import { ROOMS_ROUTE } from "@/constants/routes";
 import { Reservation } from "@/types/reservation";
 import { fetchReservations, deleteReservation } from "@/api/reservation";
-import { seedAppointments } from "@/scripts/seedReservations";
+import { toast } from "react-toastify";
 
 export default function MyReservationsPage() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Carregar reservas do backend
   useEffect(() => {
-    //seedAppointments(); // Descomente para popular o banco de dados com reservas de exemplo
-  const loadReservations = async () => {
-    const data = await fetchReservations();
-    console.log("Reservas carregadas:", data);
-    if (data) setReservations(data);
-    setLoading(false);
-  };
-  loadReservations();
-}, []);
+    const loadReservations = async () => {
+      const data = await fetchReservations();
+      if (data) setReservations(data);
+      setLoading(false);
+    };
+    loadReservations();
+  }, []);
 
-  // Solicitar exclusão
   const handleRequestDelete = (id: number) => {
     const reservation = reservations.find((r) => r.id === id) || null;
     setSelectedReservation(reservation);
   };
 
-  // Confirmar exclusão no backend
   const handleConfirmDelete = async () => {
     if (!selectedReservation) return;
 
@@ -44,6 +39,9 @@ export default function MyReservationsPage() {
     if (success) {
       setReservations(prev => prev.filter(r => r.id !== selectedReservation.id));
       setSelectedReservation(null);
+      toast.success("Reserva cancelada com sucesso!");
+    } else {
+      toast.error("Erro ao cancelar a reserva.");
     }
   };
 

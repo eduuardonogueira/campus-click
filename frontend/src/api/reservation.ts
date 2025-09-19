@@ -3,9 +3,6 @@
 import { Reservation } from "@/types/reservation";
 import { authFetch } from "./authFetch";
 
-/**
- * Buscar todas as reservas
- */
 export async function fetchReservations(): Promise<Reservation[] | null> {
   try {
     const response = await authFetch("/appointment", { method: "GET" });
@@ -22,9 +19,6 @@ export async function fetchReservations(): Promise<Reservation[] | null> {
   }
 }
 
-/**
- * Criar nova reserva
- */
 export async function createReservation(
   reservationData: Omit<Reservation, "id">
 ): Promise<Reservation | null> {
@@ -47,9 +41,6 @@ export async function createReservation(
   }
 }
 
-/**
- * Deletar reserva pelo ID
- */
 export async function deleteReservation(id: number): Promise<boolean> {
   try {
     const response = await authFetch(`/appointment/${id}`, { method: "DELETE" });
