@@ -7,7 +7,7 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 import { useState } from "react";
-import { IRoom, Amenity, RoomStatus, EnumRoomStatus } from "@/types/room";
+import { IRoom, Amenity, EnumRoomStatus } from "@/types/room";
 
 const amenityIcons: Record<Amenity, React.ReactNode> = {
   Projetor: <FaTv />,
@@ -43,11 +43,13 @@ export function EditRoomModal({
     description: sala.description,
     status: sala.status,
     amenities: sala.amenities || [] as Amenity[],
+    newAmenities: [] as string[],
+    newAmenity: "",
   });
 
   if (!isOpen) return null;
 
-  const handleChange = (field: string, value: string | number | Amenity[]) => {
+  const handleChange = (field: string, value: string | number | Amenity[] | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -58,6 +60,21 @@ export function EditRoomModal({
         ? prev.amenities.filter((a) => a !== amenity)
         : [...prev.amenities, amenity],
     }));
+  };
+
+  const handleAddAmenity = () => {
+    const value = formData.newAmenity.trim();
+    if (value && !formData.newAmenities.includes(value)) {
+      handleChange("newAmenities", [...formData.newAmenities, value]);
+      handleChange("newAmenity", "");
+    }
+  };
+
+  const removeNewAmenity = (amenity: string) => {
+    handleChange(
+      "newAmenities",
+      formData.newAmenities.filter((a) => a !== amenity)
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -71,12 +88,11 @@ export function EditRoomModal({
       <div className="bg-white rounded-lg shadow-lg min-w-[380px] max-w-lg p-6 relative">
         <h2 className="text-xl font-bold">Editar Sala</h2>
         <p className="text-gray-400 mb-4">
-          
           Atualize e configure as informações da sala
-        
         </p>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Nome e Capacidade */}
           <div className="flex gap-4">
             <div className="flex flex-col flex-1">
               <label className="text-sm font-medium mb-1">Nome da Sala</label>
@@ -88,7 +104,6 @@ export function EditRoomModal({
               />
             </div>
 
-            {/* Capacidade */}
             <div className="flex flex-col">
               <label className="text-sm font-medium mb-1">Capacidade</label>
               <input
@@ -101,18 +116,18 @@ export function EditRoomModal({
             </div>
           </div>
 
+          {/* Localização */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Localização
-            </label>
+            <label className="block text-sm font-medium mb-1">Localização</label>
             <input
               type="text"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="w-full border rounded-md  border-gray-300 p-2 text-sm text-gray-600"
+              className="w-full border rounded-md border-gray-300 p-2 text-sm text-gray-600"
             />
           </div>
 
+          {/* Descrição */}
           <div>
             <label className="block text-sm font-medium">Descrição</label>
             <textarea
@@ -122,6 +137,7 @@ export function EditRoomModal({
             />
           </div>
 
+          {/* Status */}
           <div className="relative">
             <label className="block text-sm font-medium mb-1">Status</label>
             <select
@@ -138,13 +154,13 @@ export function EditRoomModal({
             <FaChevronDown className="absolute left-25 top-9 text-gray-400 pointer-events-none" />
           </div>
 
+          {/* Botões de seleção de amenities existentes */}
           <div>
             <label className="block text-sm font-medium mb-2">Recursos</label>
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-4">
               {Object.keys(amenityIcons).map((amenityKey) => {
                 const amenity = amenityKey as Amenity;
                 const isSelected = formData.amenities.includes(amenity);
-
                 return (
                   <button
                     key={amenity}
@@ -156,14 +172,57 @@ export function EditRoomModal({
                         : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                     }`}
                   >
-                    {amenityIcons[amenity]}
-                    {amenity}
+                    {amenityIcons[amenity]} {amenity}
                   </button>
                 );
               })}
             </div>
           </div>
 
+          {/* Input de texto para novas amenities */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1"></label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Adicione recursos customizados"
+                value={formData.newAmenity}
+                onChange={(e) => handleChange("newAmenity", e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddAmenity();
+                  }
+                }}
+                className="border rounded-md border-gray-400 p-2 text-sm text-gray-600 flex-1 placeholder:text-sl"
+              />
+              <button
+                type="button"
+                onClick={handleAddAmenity}
+                className="px-3 py-1 bg-black text-white text-xs rounded-md cursor-pointer hover:bg-gray-900"
+              >
+                Adicionar
+              </button>
+            </div>
+          </div>
+
+          {/* Mostrar amenities customizadas abaixo do input */}
+          {formData.newAmenities.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {formData.newAmenities.map((amenity) => (
+                <button
+                  key={amenity}
+                  type="button"
+                  onClick={() => removeNewAmenity(amenity)}
+                  className="flex items-center gap-1 px-2 py-1 rounded-xl text-sm font-medium bg-gray-900 text-white"
+                >
+                  {amenity} ✕
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Botões cancelar/atualizar */}
           <div className="flex justify-end gap-3 mt-4">
             <button
               type="button"
@@ -184,47 +243,3 @@ export function EditRoomModal({
     </div>
   );
 }
-<<<<<<< HEAD
-
-// Modal de confirmação para exclusão
-export function DeleteRoomModal({
-  isOpen,
-  onClose,
-  onConfirm,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-}) {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-[550px] p-6">
-        <h2 className="text-xl font-bold mb-2">Excluir Sala</h2>
-        <p className="text-sm text-gray-600">Tem certeza que deseja excluir?</p>
-        <p className="mb-4 text-sm text-gray-600">
-          Esta ação não pode ser desfeita e cancelará todas as reservas
-          associadas.
-        </p>
-
-        <div className="flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-5 py-1 border border-gray-400 bg-white rounded hover:bg-gray-300"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-6 py-1 bg-red-600 text-white rounded hover:bg-black"
-          >
-            Excluir
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-=======
->>>>>>> 691f7d1172d7542cbb9d9a1c6fe22e83d46d565d
