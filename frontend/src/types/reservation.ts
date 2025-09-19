@@ -1,9 +1,13 @@
+
 export interface Reservation {
   id: number;
-  titulo: string;
-  local: string;
-  capacidade: number;
-  data: string;
-  horario: string;
-  proposito: string;
+  order: number;
+  status: "PENDING" | "CONFIRMED" | "CANCELLED";
+  date: string;       
+  startTime: string;  
+  endTime: string;
+  details: string;     
+  title: string;    
+  userId: number;
+  roomId: number;
 }

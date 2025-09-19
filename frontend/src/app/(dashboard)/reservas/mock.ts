@@ -1,6 +1,6 @@
 import { Reservation } from "@/types/reservation";
 
-export const mockReservations: Reservation[] = [
+export const mockReservations: Reservation[] = [/*
   {
     id: 1,
     titulo: 'Reunião Sala 101',
@@ -27,5 +27,5 @@ export const mockReservations: Reservation[] = [
     data: 'Quinta Feira, Agosto 11, 2025',
     horario: '9:00 AM - 12:00 PM',
     proposito: 'Aula de Técnicas de Programação para LC',
-  },
+  },*/
 ];

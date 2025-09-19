@@ -1,26 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar } from "lucide-react";
 import { FaChevronDown, FaFilter } from "react-icons/fa";
-import { DeleteReservationModal, EmptyReservations, ReservationCard } from "@/components/index";
-import { mockReservations } from "./mock";
+import {
+  DeleteReservationModal,
+  EmptyReservations,
+  ReservationCard,
+} from "@/components/index";
 import { ROOMS_ROUTE } from "@/constants/routes";
 import { Reservation } from "@/types/reservation";
+import { fetchReservations, deleteReservation } from "@/api/reservation";
+import { toast } from "react-toastify";
 
 export default function MyReservationsPage() {
-  const [reservations, setReservations] = useState<Reservation[]>(mockReservations);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadReservations = async () => {
+      const data = await fetchReservations();
+      if (data) setReservations(data);
+      setLoading(false);
+    };
+    loadReservations();
+  }, []);
 
   const handleRequestDelete = (id: number) => {
     const reservation = reservations.find((r) => r.id === id) || null;
     setSelectedReservation(reservation);
   };
-  
-  const handleConfirmDelete = () => {
-    if (selectedReservation) {
-      setReservations((prev) => prev.filter((r) => r.id !== selectedReservation.id));
+
+  const handleConfirmDelete = async () => {
+    if (!selectedReservation) return;
+
+    const success = await deleteReservation(selectedReservation.id);
+    if (success) {
+      setReservations(prev => prev.filter(r => r.id !== selectedReservation.id));
       setSelectedReservation(null);
+      toast.success("Reserva cancelada com sucesso!");
+    } else {
+      toast.error("Erro ao cancelar a reserva.");
     }
   };
 
@@ -41,7 +62,9 @@ export default function MyReservationsPage() {
       </header>
 
       <main>
-        {reservations.length > 0 ? (
+        {loading ? (
+          <p>Carregando reservas...</p>
+        ) : reservations.length > 0 ? (
           <div className="flex flex-col gap-4">
             {reservations.map((reservation) => (
               <ReservationCard
@@ -63,7 +86,7 @@ export default function MyReservationsPage() {
 
       <DeleteReservationModal
         isOpen={!!selectedReservation}
-        reservationTitle={selectedReservation?.titulo}
+        reservationTitle={selectedReservation?.title}
         onClose={() => setSelectedReservation(null)}
         onConfirm={handleConfirmDelete}
       />
