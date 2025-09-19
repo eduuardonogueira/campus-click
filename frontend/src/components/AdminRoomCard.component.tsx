@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import { EnumRoomStatus, IRoomWithAmenities, RoomStatus } from "@/types/room";
 import { DeleteRoomModal, CreateEditRoomModal } from "@/components/index";
@@ -13,12 +13,19 @@ import { AVAILABILITY_ROUTE } from "@/constants/routes";
 
 interface IRoomCardProps {
   room: IRoomWithAmenities;
+  isEditModalOpen: boolean;
+  isDeleteModalOpen: boolean;
+  setEditModalOpen: Dispatch<SetStateAction<boolean>>;
+  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export function AdminRoomCard({ room }: IRoomCardProps) {
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-
+export function AdminRoomCard({
+  room,
+  isEditModalOpen,
+  setEditModalOpen,
+  isDeleteModalOpen,
+  setDeleteModalOpen,
+}: IRoomCardProps) {
   const statusClass: Record<RoomStatus, string> = {
     available: "bg-green-200 text-green-900 border",
     scheduled: "bg-yellow-200 text-yellow-900 border",
