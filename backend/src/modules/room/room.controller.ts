@@ -24,6 +24,27 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
+  @Get('count/scheduled')
+  @ApiOperation({ summary: 'Retorna a quantidade de salas agendadas (scheduled)' })
+  @ApiResponse({ status: 200, description: 'Quantidade de salas agendadas retornada com sucesso.', schema: { example: { count: 3 } } })
+  async countScheduledRooms() {
+    return { count: await this.roomService.countScheduledRooms() };
+  }
+
+  @Get('count/available')
+  @ApiOperation({ summary: 'Retorna a quantidade de salas disponíveis (available)' })
+  @ApiResponse({ status: 200, description: 'Quantidade de salas disponíveis retornada com sucesso.', schema: { example: { count: 5 } } })
+  async countAvailableRooms() {
+    return { count: await this.roomService.countAvailableRooms() };
+  }
+
+  @Get('count')
+  @ApiOperation({ summary: 'Retorna a quantidade de salas cadastradas' })
+  @ApiResponse({ status: 200, description: 'Quantidade de salas retornada com sucesso.', schema: { example: { count: 10 } } })
+  async countRooms() {
+    return { count: await this.roomService.countRooms() };
+  }
+
   @Post()
   @ApiOperation({ summary: 'Cria uma nova sala' })
   @ApiBody({ type: CreateRoomDto })

@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { RoomAmenitiesService } from '../room-amenities/room-amenities.service';
 import { AvailabilityService } from '../availability/availability.service';
 import { AppointmentService } from '../appointments/appointment.service';
+import { EnumRoomStatus } from 'src/types/room';
 
 @Injectable()
 export class RoomService {
@@ -17,6 +18,34 @@ export class RoomService {
     private readonly availabilityService: AvailabilityService,
     private readonly appointmentService: AppointmentService,
   ) {}
+
+  async countScheduledRooms() {
+    const countScheduledRooms = await this.roomRepository.count({ where: { status: EnumRoomStatus.OCCUPIED } });
+    if(!countScheduledRooms){
+      throw new HttpException(`No scheduled rooms found`, 404);
+    }
+
+    return countScheduledRooms;
+  }
+
+  async countAvailableRooms() {
+    const countAvailableRooms = await this.roomRepository.count({ where: { status: EnumRoomStatus.AVAILABLE } });
+    if(!countAvailableRooms){
+      throw new HttpException(`No available rooms found`, 404);
+    }
+
+    return countAvailableRooms;
+  }
+
+  async countRooms() {
+    const countRooms = await this.roomRepository.count();
+    if(!countRooms){
+      throw new HttpException(`No rooms found`, 404);
+    }
+
+    return countRooms;
+  }
+
   async getRoomDetails(id: number) {
     const room = await this.findOne(id);
     const availability = await this.availabilityService.findAll();
