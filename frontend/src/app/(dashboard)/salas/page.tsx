@@ -67,7 +67,7 @@ export default function RoomPage() {
     setSearch(event.target.value);
   }
 
-  if (isLoading && !rooms) {
+  if (isLoading && !rooms || !user) {
     return <Loader text="Carregando Salas..." />;
   }
 
@@ -163,7 +163,7 @@ export default function RoomPage() {
                   room={room}
                 />
               ) : (
-                <RoomCard key={room.id} room={room} />
+                <RoomCard key={room.id} room={room} user={user} />
               )
             )}
           </div>
