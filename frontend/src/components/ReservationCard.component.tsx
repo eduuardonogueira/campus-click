@@ -11,6 +11,7 @@ export function ReservationCard({
   reservation,
   onDelete,
 }: ReservationCardProps) {
+
   return (
     <div className="border border-gray-400 rounded-md p-6">
       <div className="flex justify-between items-center">

@@ -16,8 +16,6 @@ export async function login(
   username: string,
   password: string
 ): Promise<boolean> {
-  const response = await apiLogin(username, password);
-  console.log(response);
-  return response;
+  return apiLogin(username, password);
 }
 
