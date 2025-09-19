@@ -11,13 +11,14 @@ import {
 } from "@/types/room";
 import { FaChevronDown } from "react-icons/fa";
 import { getAmenities } from "@/api/amenity";
-import { createRoom } from "@/api/room";
+import { createRoom, updateRoom } from "@/api/room";
 import { toast } from "react-toastify";
 
 interface ICreateEditRoomModal {
   isOpen: boolean;
   onClose: () => void;
   roomData?: IRoomWithAmenities;
+  roomId: number;
   action: "create" | "update";
 }
 
@@ -26,6 +27,7 @@ export function CreateEditRoomModal({
   onClose,
   roomData,
   action,
+  roomId,
 }: ICreateEditRoomModal) {
   const EMPTY_FORM_DATA: ICreateRoom = {
     name: "",
@@ -50,7 +52,7 @@ export function CreateEditRoomModal({
 
   const [amenities, setAmenities] = useState<IAmenity[] | null>();
 
-  async function fetchRooms() {
+  async function fetchAmenities() {
     try {
       const response = await getAmenities();
 
@@ -58,13 +60,26 @@ export function CreateEditRoomModal({
         setAmenities(response);
       }
     } catch (error) {
-      console.error("Erro ao buscar perfil do usuário:", error);
+      const message = "Erro ao buscar amenities";
+      toast.error(message);
+      console.error(message, error);
     }
   }
 
   useEffect(() => {
-    fetchRooms();
+    fetchAmenities();
   }, []);
+
+  useEffect(() => {
+    const newFormData: ICreateRoom = roomData
+      ? {
+          ...roomData,
+          amenities: roomData.amenities.map((a) => a.id),
+        }
+      : EMPTY_FORM_DATA;
+
+    setFormData(newFormData);
+  }, [roomData, action]);
 
   if (!isOpen) return null;
 
@@ -106,11 +121,18 @@ export function CreateEditRoomModal({
     e.preventDefault();
 
     try {
-      const data = await createRoom(formData);
+      const data = await (action === "create"
+        ? createRoom(formData)
+        : updateRoom(formData, roomId));
 
-      if (data) toast.success("Sala criada com sucesso!");
+      if (data)
+        toast.success(
+          `Sala ${action === "create" ? "criada" : "atualizada"} com sucesso!`
+        );
     } catch (error) {
-      toast.error(`Erro ao criar sala ${error}`);
+      toast.error(
+        `Erro ao ${action === "create" ? "criar" : "atualizar"} sala ${error}`
+      );
     }
     setFormData(DEFAULT_FORM_DATA);
     onClose();
@@ -264,9 +286,9 @@ export function CreateEditRoomModal({
             </button>
             <button
               type="submit"
-              className="border px-4 py-2 w-23 bg-black text-white rounded cursor-pointer hover:invert"
+              className="border px-4 py-2 bg-black text-white rounded cursor-pointer hover:invert"
             >
-              Criar
+              {action === "create" ? "Criar" : "Atualizar"}
             </button>
           </div>
         </form>
