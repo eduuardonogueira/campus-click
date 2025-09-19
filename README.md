@@ -103,7 +103,7 @@ campus-click/
 - [Eduardo Nogueira](https://github.com/eduuardonogueira)
 - [Hellry Moraes](https://github.com/HellryMoraes)
 - Paulo 
-- Gabriel Inada
+- [Gabriel Inada](https://github.com/GabrielInada)
 - [Wallace Guimarães](https://github.com/Wallace-Guimaraes)
 
 ## 📄 Licença

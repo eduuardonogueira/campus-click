@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import { EnumRoomStatus, IRoomWithAmenities, RoomStatus } from "@/types/room";
 import { DeleteRoomModal, CreateEditRoomModal } from "@/components/index";
 import { BiAlarm, BiEdit, BiTrash } from "react-icons/bi";
 import { toast } from "react-toastify";
-import { deleteRoom } from "@/api/room";
+import { deleteRoom, updateRoom } from "@/api/room";
 import Link from "next/link";
 import { AVAILABILITY_ROUTE } from "@/constants/routes";
 
@@ -49,6 +49,20 @@ export function AdminRoomCard({
 
     setDeleteModalOpen(false);
   };
+
+  async function updateRoomStatus(status: RoomStatus, roomId: number) {
+    try {
+      const response = await updateRoom({ status }, roomId);
+
+      if (response) {
+        toast.success("Status atualizado com sucesso!");
+      }
+    } catch (error) {
+      const message = "Erro ao buscar amenities";
+      toast.error(message);
+      console.error(message, error);
+    }
+  }
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-md flex flex-col overflow-hidden">
@@ -99,8 +113,11 @@ export function AdminRoomCard({
         <div className="flex items-center justify-between gap-3 ">
           <div className="w-full box-border">
             <select
-              className="w-full h-10 border border-gray-600 rounded-md text-sm text-gray-500 px-4"
+              className="w-full h-10 border border-gray-600 rounded-md text-sm text-gray-500 px-4 cursor-pointer"
               defaultValue={room.status}
+              onChange={(e) =>
+                updateRoomStatus(e.target.value as RoomStatus, room.id)
+              }
             >
               <option value={EnumRoomStatus.OCCUPIED}>Reservada</option>
               <option value={EnumRoomStatus.AVAILABLE}>Disponível</option>
@@ -111,21 +128,21 @@ export function AdminRoomCard({
           <div className="flex gap-3">
             <Link
               href={`${AVAILABILITY_ROUTE}/${room.id}`}
-              className="p-2 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-yellow-400"
+              className="py-3 border w-10 flex justify-center items-center border-gray-600 rounded-md bg-white cursor-pointer hover:bg-yellow-400"
             >
-              <BiAlarm className="text-gray-500 w-5 h-5" />
+              <BiAlarm className="text-gray-500 w-4 h-4s" />
             </Link>
             <button
               onClick={() => setEditModalOpen(true)}
-              className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-blue-400"
+              className="py-3 border w-10 flex justify-center items-center border-gray-600 rounded-md bg-white cursor-pointer hover:bg-blue-400"
             >
-              <BiEdit className="text-gray-500" />
+              <BiEdit className="text-gray-500 w-4 h-4s" />
             </button>
             <button
               onClick={() => setDeleteModalOpen(true)}
-              className="p-3 border border-gray-600 rounded-md bg-white cursor-pointer hover:bg-red-400"
+              className="py-3 border w-10 flex justify-center items-center border-gray-600 rounded-md bg-white cursor-pointer hover:bg-red-400"
             >
-              <BiTrash className="text-gray-500" />
+              <BiTrash className="text-gray-500 w-4 h-4s" />
             </button>
           </div>
         </div>
@@ -136,6 +153,7 @@ export function AdminRoomCard({
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
         action="update"
+        roomId={room.id}
       />
       <DeleteRoomModal
         isOpen={isDeleteModalOpen}

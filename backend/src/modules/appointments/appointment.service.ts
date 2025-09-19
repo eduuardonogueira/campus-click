@@ -51,6 +51,16 @@ export class AppointmentService {
     return appointment;
   }
 
+  async findByRoom(id: number) {
+    const findedAppointment = await this.appointmentRepository.find({
+      where: { room: { id } },
+    });
+    if (!findedAppointment)
+      throw new NotFoundException('Appointment not found');
+
+    return findedAppointment;
+  }
+
   async update(id: number, dto: UpdateAppointmentDto): Promise<Appointment> {
     const appointment = await this.findOne(id);
     if (dto.userId) {

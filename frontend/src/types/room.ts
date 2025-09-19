@@ -1,3 +1,6 @@
+import { IAppointment } from "./appointment";
+import { IAvailability } from "./availability";
+
 export type RoomStatus = "available" | "scheduled" | "maintenance";
 export type RoomType = "room" | "laboratory" | "maintenance";
 
@@ -46,5 +49,11 @@ export interface ICreateRoom {
   type: RoomType;
   imageUrl?: string;
   amenities?: number[];
+}
+
+export interface IRoomDetails {
+  room: IRoomWithAmenities;
+  availability: IAvailability[];
+  appointments: IAppointment[];
 }
 

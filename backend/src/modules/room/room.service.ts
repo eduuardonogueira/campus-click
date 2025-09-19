@@ -48,14 +48,12 @@ export class RoomService {
 
   async getRoomDetails(id: number) {
     const room = await this.findOne(id);
-    const availability = await this.availabilityService.findAll();
-    const appointments = await this.appointmentService.findAll();
-    const roomAvailability = availability.filter((a) => a.room.id === id);
-    const roomAppointments = appointments.filter((ap) => ap.room.id === id);
+    const availability = await this.availabilityService.findByRoom(id);
+    const appointments = await this.appointmentService.findByRoom(id);
     return {
       room,
-      availability: roomAvailability,
-      appointments: roomAppointments,
+      availability,
+      appointments,
     };
   }
 
@@ -129,15 +127,48 @@ export class RoomService {
     return createdRoom;
   }
 
-  async update(id: number, updateRoomDto: UpdateRoomDto) {
+  async update(roomId: number, updateRoomDto: UpdateRoomDto) {
+    if (updateRoomDto.amenities) {
+      const findedRoom = await this.findOne(roomId);
+      const newAmenitiesIds = updateRoomDto.amenities;
+      const currentAmenitiesIds = findedRoom.amenities.map((a) => a.id);
+
+      const toRemove = currentAmenitiesIds.filter(
+        (id) => !newAmenitiesIds.includes(id),
+      );
+
+      const toAdd = newAmenitiesIds.filter(
+        (id) => !currentAmenitiesIds.includes(id),
+      );
+
+      if (toRemove.length > 0) {
+        await Promise.all(
+          toRemove.map((amenityId) =>
+            this.roomAmenitiesService.deleteByRoomAndAmenityId(
+              roomId,
+              amenityId,
+            ),
+          ),
+        );
+      }
+
+      if (toAdd.length > 0) {
+        await Promise.all(
+          toAdd.map((amenityId) =>
+            this.roomAmenitiesService.create({ roomId, amenityId }),
+          ),
+        );
+      }
+    }
+
     const room = await this.roomRepository.preload({
-      id,
+      id: roomId,
       ...updateRoomDto,
       updatedAt: new Date(),
     });
 
     if (!room) {
-      throw new HttpException(`Room with ID ${id} not found`, 404);
+      throw new HttpException(`Room with ID ${roomId} not found`, 404);
     }
 
     return this.roomRepository.save(room);

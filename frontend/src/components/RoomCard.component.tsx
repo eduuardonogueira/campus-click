@@ -4,12 +4,14 @@ import { useState } from "react";
 import { FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import { IRoomWithAmenities, RoomStatus } from "@/types/room";
 import { ReserveRoomModal } from "./ReserveRoomModal.component";
+import { IUser } from "@/types/user";
 
 interface IRoomCardProps {
   room: IRoomWithAmenities;
+  user: IUser;
 }
 
-export function RoomCard({ room }: IRoomCardProps) {
+export function RoomCard({ room, user }: IRoomCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const statusLabels: Record<RoomStatus, string> = {
@@ -88,10 +90,12 @@ export function RoomCard({ room }: IRoomCardProps) {
           {buttonInfo[room.status].text}
         </button>
       </div>
+
       <ReserveRoomModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         room={room}
+        user={user}
       />
     </div>
   );
